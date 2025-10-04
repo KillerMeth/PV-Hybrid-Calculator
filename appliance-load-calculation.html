@@ -6,7 +6,7 @@
   <title>Home Appliance Load Calculator</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 24px; background: #f7fafc; color: #0f172a; }
-    .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); max-width: 900px; margin: 0 auto; }
+    .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); max-width: 900px; margin: 0 auto; position: relative; }
     h1 { font-size: 20px; margin-bottom: 12px; }
     table { width: 100%; border-collapse: collapse; margin-top: 12px; }
     th, td { padding: 8px; border: 1px solid #e2e8f0; text-align: center; }
@@ -16,10 +16,29 @@
     button { margin-top: 16px; padding: 10px 14px; border-radius:10px; border:0; background:#0ea5a3; color:white; font-weight:600; cursor:pointer; }
     .result { margin-top: 18px; font-size: 14px; }
     footer { margin-top: 18px; text-align: right; font-size: 13px; color: #94a3b8; }
+
+    /* Home button style */
+    .home-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #0ea5a3;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background 0.2s ease;
+    }
+    .home-btn:hover {
+      background: #0c9693;
+    }
   </style>
 </head>
 <body>
   <div class="card">
+    <a href="index.html" class="home-btn">🏠 Home</a>
     <h1>Home Appliance Load Calculator</h1>
     <p>Enter the quantity of each appliance to calculate total load.</p>
     <table id="loadTable">
@@ -50,7 +69,6 @@
         <tr><td>Blender / Mixer</td><td>500</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
         <tr><td>Laptop Charger</td><td>60</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
         <tr><td>Mobile Phone Charger</td><td>20</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <!-- Add more rows for AC, Water Pumps, etc. as needed -->
       </tbody>
       <tfoot>
         <tr>
