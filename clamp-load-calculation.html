@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Clamp Meter Load Calculator – Macksons Solar</title>
+  <style>
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;margin:24px;background:#f7fafc;color:#0f172a}
+    .card{background:white;padding:20px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06);max-width:700px;margin:0 auto}
+    h1{font-size:20px;margin:0 0 8px}
+    label{display:block;margin-top:12px;font-size:13px}
+    input[type="number"],select{width:100%;padding:8px 10px;border-radius:8px;border:1px solid #e2e8f0;font-size:14px;text-align:center}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+    button{margin-top:16px;padding:10px 14px;border-radius:10px;border:0;background:#0ea5a3;color:white;font-weight:600;cursor:pointer;width:100%}
+    .result{margin-top:18px;padding:14px;border-radius:10px;background:#f1f5f9;font-size:14px}
+    .warn{color:#92400e;background:#fff7ed;padding:10px;border-radius:8px;margin-top:10px}
+    .ok{color:#064e3b;background:#ecfdf5;padding:10px;border-radius:8px;margin-top:10px}
+    footer{margin-top:18px;text-align:right;font-size:13px;color:#94a3b8}
+    @media(max-width:700px){.row{flex-direction:column}}
+	
+	    /* Home button style */
+    .home-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #0ea5a3;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background 0.2s ease;
+    }
+    .home-btn:hover {
+      background: #0c9693;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+	<a href="index.html" class="home-btn">🏠 Home</a>
+    <h1>Clamp Meter Load Calculator – Macksons Solar</h1>
+    <p style="margin:0 0 12px;color:#475569">Use clamp meter readings to estimate house load quickly. Default PF = 0.9, Voltage: 230V (1Φ) / 400V (3Φ).</p>
+
+    <label>System Type</label>
+    <select id="phase">
+      <option value="single">Single Phase</option>
+      <option value="three">Three Phase</option>
+    </select>
+
+    <div id="singlePhaseInputs" class="row" style="margin-top:10px;">
+      <div class="col">
+        <label>Current (A)</label>
+        <input type="number" id="singleCurrent" placeholder="e.g. 10" min="0" step="0.1" />
+      </div>
+    </div>
+
+    <div id="threePhaseInputs" style="display:none;margin-top:10px;">
+      <div class="row">
+        <div class="col">
+          <label>Phase 1 Current (A)</label>
+          <input type="number" id="I1" placeholder="e.g. 10" min="0" step="0.1" />
+        </div>
+        <div class="col">
+          <label>Phase 2 Current (A)</label>
+          <input type="number" id="I2" placeholder="e.g. 8" min="0" step="0.1" />
+        </div>
+        <div class="col">
+          <label>Phase 3 Current (A)</label>
+          <input type="number" id="I3" placeholder="e.g. 6" min="0" step="0.1" />
+        </div>
+      </div>
+    </div>
+
+    <button id="calcBtn">Calculate Load</button>
+
+    <div id="result" class="result" style="display:none"></div>
+
+    <footer>Created by Milan Methnuwan</footer>
+  </div>
+
+  <script>
+    const PF = 0.9;
+    const V_SINGLE = 230;
+    const V_THREE = 400;
+
+    document.getElementById('phase').addEventListener('change', e => {
+      const phase = e.target.value;
+      document.getElementById('singlePhaseInputs').style.display = (phase === 'single') ? 'block' : 'none';
+      document.getElementById('threePhaseInputs').style.display = (phase === 'three') ? 'block' : 'none';
+      document.getElementById('result').style.display = 'none';
+    });
+
+    document.getElementById('calcBtn').addEventListener('click', () => {
+      const phase = document.getElementById('phase').value;
+      const resultDiv = document.getElementById('result');
+      let P = 0;
+
+      if (phase === 'single') {
+        const I = parseFloat(document.getElementById('singleCurrent').value) || 0;
+        if (I <= 0) {
+          resultDiv.style.display = 'block';
+          resultDiv.innerHTML = '<div class="warn">Please enter a valid current (A).</div>';
+          return;
+        }
+        P = V_SINGLE * I * PF;
+      } else {
+        const I1 = parseFloat(document.getElementById('I1').value) || 0;
+        const I2 = parseFloat(document.getElementById('I2').value) || 0;
+        const I3 = parseFloat(document.getElementById('I3').value) || 0;
+        if (I1 <= 0 && I2 <= 0 && I3 <= 0) {
+          resultDiv.style.display = 'block';
+          resultDiv.innerHTML = '<div class="warn">Please enter at least one phase current.</div>';
+          return;
+        }
+        const avgI = (I1 + I2 + I3) / 3;
+        P = Math.sqrt(3) * V_THREE * avgI * PF;
+      }
+
+      const kW = P / 1000;
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = `
+        <div class="ok">
+          <strong>Estimated Load:</strong> ${P.toFixed(0)} W (${kW.toFixed(2)} kW)
+        </div>
+        <p style="margin-top:6px;color:#475569">
+          Power Factor = ${PF}, Voltage = ${phase === 'single' ? V_SINGLE : V_THREE}V
+        </p>
+      `;
+    });
+  </script>
+</body>
+</html>
