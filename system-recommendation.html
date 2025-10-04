@@ -22,10 +22,29 @@
     table{width:100%;border-collapse:collapse;margin-top:10px}
     th,td{padding:8px 6px;border-bottom:1px solid #e6eef6;text-align:left;font-size:13px}
     th{font-weight:700}
+	
+	    /* Home button style */
+    .home-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #0ea5a3;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background 0.2s ease;
+    }
+    .home-btn:hover {
+      background: #0c9693;
+    }
   </style>
 </head>
 <body>
   <div class="card">
+	<a href="index.html" class="home-btn">🏠 Home</a>
     <h1>Hybrid System Sales Calculator – Macksons Solar</h1>
     <p style="margin:0 0 12px;color:#475569">Quickly recommend inverter & battery based on customer's house load. Change "Desired backup hours" if customer wants different autonomy.</p>
 
