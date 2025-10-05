@@ -319,7 +319,7 @@
           const V = opt.moduleVoltage;
           const maxChargePower_kW = (inv.maxChargeA * V) / 1000 * INVERTER_EFF;
           const chargeTimeHours = opt.totalModules_kWh / (maxChargePower_kW > 0 ? maxChargePower_kW : Infinity);
-          const dischargeTimeHours = (opt.usableTotal_kWh * INVERTER_EFF) / (loadKW > 0 ? loadKW : Infinity);
+          const dischargeTimeHours = (opt.usableTotal_kWh * INVERTER_EFF) / (maxChargePower_kW > 0 ? maxChargePower_kW : Infinity);
           return { ...opt, maxChargePower_kW, chargeTimeHours, dischargeTimeHours };
         });
       }
@@ -389,3 +389,4 @@
 </body>
 
 </html>
+
