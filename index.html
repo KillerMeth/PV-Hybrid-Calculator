@@ -1,71 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Macksons Solar - Hybrid System Calculator</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>We’ll Be Back Soon 😺</title>
   <style>
     body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(135deg, #f0f4f8, #e2e8f0);
+      margin: 0;
+      height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8fafc, #e0e7ff);
       color: #1e293b;
-    }
-    .container {
-      background: #ffffff;
-      padding: 40px 60px;
-      border-radius: 20px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
       text-align: center;
-      max-width: 400px;
-      width: 100%;
     }
-    h2 {
-      margin-bottom: 10px;
-      font-size: 24px;
-      font-weight: bold;
+    h1 {
+      font-size: 2em;
+      margin-bottom: 0.5em;
     }
     p {
-      margin: 0 0 30px;
-      font-size: 14px;
+      color: #475569;
+      margin-bottom: 1.5em;
+    }
+    img {
+      max-width: 260px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      margin-bottom: 1em;
+    }
+    .note {
+      font-size: 0.9em;
       color: #64748b;
     }
     .btn {
-      display: block;
-      margin: 15px auto;
-      padding: 14px 0;
-      width: 100%;
-      border: none;
-      border-radius: 12px;
-      background: #0ea5e9;
+      margin-top: 1em;
+      background: #6366f1;
       color: white;
-      font-size: 16px;
-      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
       cursor: pointer;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+      font-weight: 600;
     }
     .btn:hover {
-      background: #0284c7;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
+      background: #4f46e5;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Hybrid System Calculator</h2>
-    <p>Macksons Solar <br> Created by Milan Methnuwan</p>
-
-    <a href="appliance-load-calculation.html" class="btn">⚡ Home Appliance - Load Calculation</a>
-	<a href="clamp-load-calculation.html" class="btn">⚡ Clamp meter - Load Calculation</a>
-    <a href="system-recommendation.html" class="btn">🔋 System Recommendation</a>
-	
-  </div>
+  <img src="catg.gif" alt="Funny cat meme" />
+  <h1>Hold on! We’re doing some cat-astrophic maintenance 🐾</h1>
+  <p>Our site took a little catnap while we fix things. Don’t worry — we’ll be back before this cat finishes its 9th nap!</p>
+  <button class="btn" onclick="window.location.reload()">Try Again 😸</button>
+  <div class="note">(Refresh in a bit, human.)</div>
 </body>
 </html>
