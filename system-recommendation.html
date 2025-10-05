@@ -351,7 +351,7 @@
 
       html += '<div><strong>Battery recommendations (per module options)</strong>';
       html += '<div style="font-size:13px;color:#475569;margin-top:6px">Calculations use battery DOD 90% and inverter efficiency 97%.</div>';
-      html += '<table><thead><tr><th>Battery</th><th>Module kWh</th><th>Modules needed</th><th>Total kWh</th><th>Usable kWh (DOD)</th><th>Discharge hrs @ load</th><th>Charge hrs (from PV)</th></tr></thead><tbody>';
+      html += '<table><thead><tr><th>Battery</th><th>Module kWh</th><th>Modules needed</th><th>Total kWh</th><th>Usable kWh (DOD)</th><th>Discharge hrs @ load or grid</th><th>Charge hrs (from PV)</th></tr></thead><tbody>';
 
       timesByInv.forEach(opt => {
         if (opt.incompatible) {
@@ -389,4 +389,5 @@
 </body>
 
 </html>
+
 
