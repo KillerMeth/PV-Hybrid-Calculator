@@ -81,11 +81,34 @@ From there, you should see the UI that lets you navigate to:
 
 ### Project Structure
 
-pgsl
-
-PV-Hybrid-Calculator/
-├── index.html
-├── appliance-load-calculation.html
-├── clamp-load-calculation.html
-├── system-recommendation.html
+PV-Hybrid-Calculator\
+├── index.html\
+├── appliance-load-calculation.html\
+├── clamp-load-calculation.html\
+├── system-recommendation.html\
 └── (possibly supporting JS, CSS files)
+- `index.html` — entry / navigation page
+- `appliance-load-calculation.html` — UI & logic for load estimation
+- `clamp-load-calculation.html` — UI for inverter/DC load calculations
+- `system-recommendation.html` — UI for sizing recommendations
+
+If there are JavaScript or CSS files, they are included/linked inside the HTML pages.
+
+### Contributing
+
+Contributions are welcome! Here are some ways you can help:
+- Report bugs or issues
+- Add input validation and error handling
+- Improve UI/UX (styles, layouts, responsiveness)
+- Add support for more system types (off-grid, AC coupling, hybrid modes)
+- Enhance calculations (temperature effects, derating, real world losses)
+
+Before submitting a pull request, please:
+- Fork the repository
+- Create a new branch (git checkout -b feature/YourFeature)
+- Make your changes & test thoroughly
+- Submit a PR with a clear description of what you did
+
+### License
+
+
