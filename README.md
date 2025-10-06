@@ -15,15 +15,14 @@
 - [Project Structure](#project-structure)  
 - [Contributing](#contributing)  
 - [License](#license)  
-- [Acknowledgements](#acknowledgements)
 
 ---
 
 ## Features
 
 - Appliance load calculation  
-- Clamp (or inverter / DC-DC) load calculation  
-- System recommendation (PV panel, battery, inverter sizing)  
+- Clamp meter load calculation  
+- System recommendation (Battery, inverter sizing)  
 - Interactive web interface (HTML / client side)  
 - Modular design (so you can extend or customize calculations)
 
@@ -57,25 +56,26 @@ Since the project appears to be HTML + client-side logic (JS), you don’t need 
 ### Running Locally
 
 If you’re not using a server, you can just open index.html in your browser (depending on browser security settings).
+
 If using a local HTTP server, open in browser:
 ````bash
 http://localhost:8000/index.html
 ````
 From there, you should see the UI that lets you navigate to:
 - appliance load calculation
-- clamp / inverter load calculation
+- clamp meter load calculation
 - system recommendation
 
 ### Usage
 1. Navigate to Appliance Load Calculation
-  - Enter details of your appliances (power rating, hours of use, quantity)
-  - The tool calculates total daily energy demand
-2. Go to Clamp / Load Calculation
-  - Input inverter or DC component data
-  - Estimate DC load or conversion losses
+  - Enter details of your appliances (power rating, quantity)
+  - The tool calculates total energy demand
+2. Go to Clamp Calculation
+  - Input clamp meter data
+  - Estimate load
 4. Go to System Recommendation
-  - Based on load and site parameters (solar irradiance, battery efficiency, etc.)
-  - The tool suggests PV panel sizing, battery capacity, inverter rating
+  - Based on load and site parameters
+  - The tool suggests battery capacity, inverter rating
 
 > ⚠️ _Note_: Be mindful of units (W, kW, Wh, etc.) and efficiencies (losses) when providing inputs.
 
@@ -89,7 +89,7 @@ PV-Hybrid-Calculator\
 └── (possibly supporting JS, CSS files)
 - `index.html` — entry / navigation page
 - `appliance-load-calculation.html` — UI & logic for load estimation
-- `clamp-load-calculation.html` — UI for inverter/DC load calculations
+- `clamp-load-calculation.html` — UI for clamp meter load calculations
 - `system-recommendation.html` — UI for sizing recommendations
 
 If there are JavaScript or CSS files, they are included/linked inside the HTML pages.
@@ -111,4 +111,8 @@ Before submitting a pull request, please:
 
 ### License
 
+This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** License.  
+You are free to share and adapt the code **for non-commercial purposes**, as long as you **credit the author**.  
+
+Full license text: [LICENSE](./LICENSE.md)
 
