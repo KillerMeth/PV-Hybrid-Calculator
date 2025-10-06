@@ -50,6 +50,42 @@ Since the project appears to be HTML + client-side logic (JS), you don’t need 
    cd PV-Hybrid-Calculator
 
 2. (Optional) If you want to host it via a simple HTTP server, you can use e.g.:
+  ```bash
    # with Python 3
     python3 -m http.server 8000
+  ````
+### Running Locally
 
+If you’re not using a server, you can just open index.html in your browser (depending on browser security settings).
+If using a local HTTP server, open in browser:
+````bash
+http://localhost:8000/index.html
+````
+From there, you should see the UI that lets you navigate to:
+- appliance load calculation
+- clamp / inverter load calculation
+- system recommendation
+
+### Usage
+1. Navigate to Appliance Load Calculation
+  - Enter details of your appliances (power rating, hours of use, quantity)
+  - The tool calculates total daily energy demand
+2. Go to Clamp / Load Calculation
+  - Input inverter or DC component data
+  - Estimate DC load or conversion losses
+4. Go to System Recommendation
+  - Based on load and site parameters (solar irradiance, battery efficiency, etc.)
+  - The tool suggests PV panel sizing, battery capacity, inverter rating
+
+> ⚠️ _Note_: Be mindful of units (W, kW, Wh, etc.) and efficiencies (losses) when providing inputs.
+
+### Project Structure
+
+pgsl
+
+PV-Hybrid-Calculator/
+├── index.html
+├── appliance-load-calculation.html
+├── clamp-load-calculation.html
+├── system-recommendation.html
+└── (possibly supporting JS, CSS files)
