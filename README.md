@@ -66,7 +66,7 @@ From there, you should see the UI that lets you navigate to:
 - clamp meter load calculation
 - system recommendation
 
-### Usage
+## Usage
 1. Navigate to Appliance Load Calculation
   - Enter details of your appliances (power rating, quantity)
   - The tool calculates total energy demand
@@ -79,7 +79,7 @@ From there, you should see the UI that lets you navigate to:
 
 > ⚠️ _Note_: Be mindful of units (W, kW, Wh, etc.) and efficiencies (losses) when providing inputs.
 
-### Project Structure
+## Project Structure
 
 PV-Hybrid-Calculator\
 ├── index.html\
@@ -94,7 +94,7 @@ PV-Hybrid-Calculator\
 
 If there are JavaScript or CSS files, they are included/linked inside the HTML pages.
 
-### Contributing
+## Contributing
 
 Contributions are welcome! Here are some ways you can help:
 - Report bugs or issues
@@ -109,7 +109,7 @@ Before submitting a pull request, please:
 - Make your changes & test thoroughly
 - Submit a PR with a clear description of what you did
 
-### License
+## License
 
 This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** License.  
 You are free to share and adapt the code **for non-commercial purposes**, as long as you **credit the author**.  
