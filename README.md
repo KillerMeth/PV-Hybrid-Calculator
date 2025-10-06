@@ -113,6 +113,3 @@ Before submitting a pull request, please:
 
 This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** License.  
 You are free to share and adapt the code **for non-commercial purposes**, as long as you **credit the author**.  
-
-Full license text: [LICENSE](./LICENSE.md)
-
