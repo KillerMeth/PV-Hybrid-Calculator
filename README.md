@@ -1,6 +1,6 @@
 # PV-Hybrid-Calculator
 
-**PV-Hybrid-Calculator** is a web-based tool to help design and evaluate hybrid (solar + grid / battery) photovoltaic (PV) systems. It provides calculations for appliance loads, PV sizing, system recommendations, and more.
+**PV-Hybrid-Calculator** is a web-based tool to help design and evaluate hybrid (solar + grid / battery) photovoltaic (PV) systems. It provides calculations for appliance loads, system recommendations, and more.
 
 ---
 
@@ -48,3 +48,8 @@ Since the project appears to be HTML + client-side logic (JS), you don’t need 
    ```bash
    git clone https://github.com/KillerMeth/PV-Hybrid-Calculator.git
    cd PV-Hybrid-Calculator
+
+2. (Optional) If you want to host it via a simple HTTP server, you can use e.g.:
+   # with Python 3
+    python3 -m http.server 8000
+
