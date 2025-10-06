@@ -241,13 +241,9 @@
 
     // Common inverter shared for both
     const commonInverters = [
-      {
-        id: 'STH-8KTL-LS',
-        kW: 8,
-        maxChargeA: 160,
-        modes: ['offgrid'],
-        allowedBatteries: ['STE-MS5', 'STE-MS10']
-      }
+      { id: 'STH-8KTL-LS', kW: 8, maxChargeA: 160, modes: ['offgrid'], allowedBatteries: ['STE-MS5', 'STE-MS10'] },
+	  { id: 'STH-5KTL-LS-P', kW: 5, maxChargeA: 100, modes: ['offgrid'], allowedBatteries: ['STE-MS5', 'STE-MS10'] },
+	  { id: 'STH-5KTL-LS', kW: 8, maxChargeA: 120, modes: ['offgrid'], allowedBatteries: ['STE-MS5', 'STE-MS10'] }
     ];
 
     // Utility
@@ -381,7 +377,7 @@
         }
       }
 
-      html += '<hr/><div><strong>Additional notes</strong><ul style="margin-top:8px"><li>Single-phase hybrid & on-grid max inverter capacity = <code>5 kW</code>. 8 kW single-phase model is off-grid only.</li><li>Battery usable energy = module kWh × DOD (90%).</li><li>Charge power ≈ inverter max charge A × battery V × efficiency.</li><li>If load &gt; inverter capacity, split circuits into sub-panels.</li></ul></div>';
+      html += '<hr/><div><strong>Additional notes</strong><ul style="margin-top:8px"><li>Single-phase hybrid & on-grid max inverter capacity = <code>5 kW</code>. 8 kW single-phase model is off-grid only.</li><li>Single-phase inverters can be used in a three-phase system only in off-grid mode, if the house does not have any three-phase appliances.</li><li>Battery usable energy = module kWh × DOD (90%).</li><li>Charge power ≈ inverter max charge A × battery V × efficiency.</li><li>If load &gt; inverter capacity, split circuits into sub-panels.</li></ul></div>';
 
       out.innerHTML = html;
     });
