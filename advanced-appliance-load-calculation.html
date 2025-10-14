@@ -45,6 +45,7 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             max-width: 1200px;
             margin: 0 auto;
+            position: relative;
         }
         
         @media (min-width: 768px) {
@@ -62,6 +63,37 @@
         
         .side-note {
             width: 100%;
+        }
+        
+        /* Mobile layout - side note between heading and input */
+        @media (max-width: 767px) {
+            .container {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .side-note {
+                order: 2;
+                margin: 15px 0;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+            
+            .wattage-note {
+                padding: 15px !important;
+                margin: 0 0 20px 0 !important;
+            }
+            
+            .wattage-list {
+                max-height: 200px !important;
+            }
+            
+            .wattage-item {
+                padding: 6px 8px !important;
+                font-size: 0.85em;
+            }
         }
         
         h1 {
@@ -261,7 +293,7 @@
         .wattage-note h3 {
             color: #2c3e50;
             margin-top: 0;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             font-size: clamp(1rem, 2.5vw, 1.1em);
             display: flex;
             align-items: center;
@@ -275,7 +307,7 @@
         .wattage-list {
             max-height: 400px;
             overflow-y: auto;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         
         .wattage-item {
@@ -326,6 +358,20 @@
             margin-top: 10px;
             font-style: italic;
             line-height: 1.4;
+        }
+        
+        /* Hide desktop note on mobile and vice versa */
+        .desktop-only {
+            display: none;
+        }
+        
+        @media (min-width: 768px) {
+            .mobile-only {
+                display: none;
+            }
+            .desktop-only {
+                display: block;
+            }
         }
         
         /* Report Modal */
@@ -474,7 +520,7 @@
             }
             
             .wattage-item {
-                padding: 10px 8px;
+                padding: 6px 8px;
             }
             
             .quantity-input {
@@ -498,7 +544,8 @@
             }
             
             .wattage-item {
-                padding: 8px 6px;
+                padding: 6px 4px;
+                font-size: 0.8em;
             }
             
             .quantity-input {
@@ -539,6 +586,147 @@
 			<h2>Macksons Solar</h2>
             <p class="description">Enter your appliances to calculate total power (kW) and energy consumption (kWh).</p>
 
+            <!-- Mobile Side Note - Shows only on mobile -->
+            <div class="side-note mobile-only">
+                <div class="wattage-note">
+                    <h3>Quick Wattage Reference</h3>
+                    <p class="note-text" style="margin-bottom: 12px; font-size: 0.8em;">Click on any appliance to auto-fill the form</p>
+                    
+                    <div class="wattage-list">
+                        <div class="wattage-item" data-name="LED Bulb" data-watts="12">
+                        <span class="appliance-name">LED Bulb</span>
+                        <span class="wattage-value">12W</span>
+                    </div>
+                    <div class="wattage-item" data-name="CFL Bulb" data-watts="20">
+                        <span class="appliance-name">CFL Bulb</span>
+                        <span class="wattage-value">20W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Ceiling Fan" data-watts="70">
+                        <span class="appliance-name">Ceiling Fan</span>
+                        <span class="wattage-value">70W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Table Fan" data-watts="50">
+                        <span class="appliance-name">Table Fan</span>
+                        <span class="wattage-value">50W</span>
+                    </div>
+                    <div class="wattage-item" data-name="TV (32–55")" data-watts="100">
+                        <span class="appliance-name">TV (32–55")</span>
+                        <span class="wattage-value">100W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Home Theatre" data-watts="200">
+                        <span class="appliance-name">Home Theatre</span>
+                        <span class="wattage-value">200W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Refrigerator" data-watts="200">
+                        <span class="appliance-name">Refrigerator (32")</span>
+                        <span class="wattage-value">200W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Air Fryer" data-watts="1500">
+                        <span class="appliance-name">Air Fryer</span>
+                        <span class="wattage-value">1500W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Freezer" data-watts="250">
+                        <span class="appliance-name">Freezer</span>
+                        <span class="wattage-value">250W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Washing Machine (motor only)" data-watts="400">
+                        <span class="appliance-name">Washing Machine (motor only)</span>
+                        <span class="wattage-value">400W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Washing Machine (with heater)" data-watts="1800">
+                        <span class="appliance-name">Washing Machine (with heater)</span>
+                        <span class="wattage-value">1800W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Microwave Oven" data-watts="1200">
+                        <span class="appliance-name">Microwave Oven</span>
+                        <span class="wattage-value">1200W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Rice Cooker" data-watts="500">
+                        <span class="appliance-name">Rice Cooker)</span>
+                        <span class="wattage-value">500W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Electric Kettle" data-watts="1500">
+                        <span class="appliance-name">Electric Kettle</span>
+                        <span class="wattage-value">1500W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Toaster" data-watts="1000">
+                        <span class="appliance-name">Toaster</span>
+                        <span class="wattage-value">1000W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Blender / Mixer" data-watts="500">
+                        <span class="appliance-name">Blender / Mixer</span>
+                        <span class="wattage-value">500W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Laptop Charger" data-watts="60">
+                        <span class="appliance-name">Laptop Charger</span>
+                        <span class="wattage-value">60W</span>
+                    </div>
+                    <div class="wattage-item" data-name="Mobile Phone Charger" data-watts="20">
+                        <span class="appliance-name">Mobile Phone Charger</span>
+                        <span class="wattage-value">20W</span>
+                    </div>
+					<div class="wattage-item" data-name="AC 9,000 BTU" data-watts="1000">
+                        <span class="appliance-name">AC 9,000 BTU</span>
+                        <span class="wattage-value">1000W</span>
+                    </div>
+					<div class="wattage-item" data-name="AC 12,000 BTU" data-watts="1350">
+                        <span class="appliance-name">AC 12,000 BTU</span>
+                        <span class="wattage-value">1350W</span>
+                    </div>
+					<div class="wattage-item" data-name="AC 18,000 BTU" data-watts="2200">
+                        <span class="appliance-name">AC 18,000 BTU</span>
+                        <span class="wattage-value">2200W</span>
+                    </div>
+					<div class="wattage-item" data-name="AC 24,000 BTU" data-watts="3000">
+                        <span class="appliance-name">AC 24,000 BTU</span>
+                        <span class="wattage-value">3000W</span>
+                    </div>
+					<div class="wattage-item" data-name="AC 36,000 BTU" data-watts="3500">
+                        <span class="appliance-name">AC 36,000 BTU</span>
+                        <span class="wattage-value">3500W</span>
+                    </div>
+					<div class="wattage-item" data-name="Instant Water Heater" data-watts="4000">
+                        <span class="appliance-name">Instant Water Heater</span>
+                        <span class="wattage-value">4000W</span>
+                    </div>
+					<div class="wattage-item" data-name="Clothes Iron" data-watts="1500">
+                        <span class="appliance-name">Clothes Iron</span>
+                        <span class="wattage-value">1500W</span>
+                    </div>
+					<div class="wattage-item" data-name="DVR / NVR" data-watts="30">
+                        <span class="appliance-name">DVR / NVR</span>
+                        <span class="wattage-value">30W</span>
+                    </div>
+					<div class="wattage-item" data-name="CCTV Camera" data-watts="10">
+                        <span class="appliance-name">CCTV Camera</span>
+                        <span class="wattage-value">10W</span>
+                    </div>
+					<div class="wattage-item" data-name="Pressure Pump (1 kW)" data-watts="1000">
+                        <span class="appliance-name">Pressure Pump (1 kW)</span>
+                        <span class="wattage-value">1000W</span>
+                    </div>
+					<div class="wattage-item" data-name="Water Pump 0.5–1 HP" data-watts="500">
+                        <span class="appliance-name">Water Pump 0.5–1 HP</span>
+                        <span class="wattage-value">500W</span>
+                    </div>
+					<div class="wattage-item" data-name="Water Pump 1.5–2 HP" data-watts="1300">
+                        <span class="appliance-name">Water Pump 1.5–2 HP</span>
+                        <span class="wattage-value">1300W</span>
+                    </div>
+					<div class="wattage-item" data-name="Large Pump 3 HP+" data-watts="3500">
+                        <span class="appliance-name">Large Pump 3 HP+</span>
+                        <span class="wattage-value">3500W</span>
+                    </div>
+                    </div>
+                    
+                    <div style="padding: 8px; background: #fff3cd; border-radius: 5px;">
+                        <p style="font-size: 0.75em; margin: 0; color: #856404;">
+                            <strong>Tip:</strong> Click any appliance above to auto-fill the form
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <div class="input-group">
                 <input type="text" id="applianceName" placeholder="Appliance Name" required>
                 <input type="number" id="applianceWatts" placeholder="Power (Watts)" min="1" required>
@@ -576,10 +764,11 @@
                 <p>Total Energy: <span id="totalKWH" class="kwh">0</span> kWh/day</p>
                 <p>Estimated Monthly Energy: <span id="totalKWHMonth" class="kwh">0</span> kWh/month</p>
             </div>
+			
         </div>
 
-        <!-- Side Note for Wattage Reference -->
-        <div class="side-note">
+        <!-- Desktop Side Note - Shows only on desktop -->
+        <div class="side-note desktop-only">
             <div class="wattage-note">
                 <h3>Quick Wattage Reference</h3>
                 <p class="note-text" style="margin-bottom: 15px;">Click on any appliance to auto-fill the form</p>
@@ -718,7 +907,7 @@
                 </div>
             </div>
         </div>
-		<footer>Created by Milan Methnuwan</footer>
+		
     </div>
 
     <!-- Report Modal -->
@@ -784,6 +973,7 @@
             <button class="print-btn" onclick="window.print()">🖨️ Print Report</button>
         </div>
     </div>
+	<footer>Created by Milan Methnuwan</footer>
 
     <script>
         // Get DOM elements
