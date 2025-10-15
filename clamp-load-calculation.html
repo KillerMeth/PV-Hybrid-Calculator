@@ -5,78 +5,342 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Clamp Meter Load Calculator – Macksons Solar</title>
   <style>
-    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;margin:24px;background:#f7fafc;color:#0f172a}
-    .card{background:white;padding:20px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06);max-width:700px;margin:0 auto}
-    h1{font-size:20px;margin:0 0 8px}
-    label{display:block;margin-top:12px;font-size:13px}
-    input[type="number"],select{width:100%;padding:8px 10px;border-radius:8px;border:1px solid #e2e8f0;font-size:14px;text-align:center}
-    .row{display:flex;gap:12px}
-    .col{flex:1}
-    button{margin-top:16px;padding:10px 14px;border-radius:10px;border:0;background:#0ea5a3;color:white;font-weight:600;cursor:pointer;width:100%}
-    .result{margin-top:18px;padding:14px;border-radius:10px;background:#f1f5f9;font-size:14px}
-    .warn{color:#92400e;background:#fff7ed;padding:10px;border-radius:8px;margin-top:10px}
-    .ok{color:#064e3b;background:#ecfdf5;padding:10px;border-radius:8px;margin-top:10px}
-    footer{margin-top:18px;text-align:right;font-size:13px;color:#94a3b8}
-    @media(max-width:700px){.row{flex-direction:column}}
-	
-	    /* Home button style */
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #f8fafc;
+      --accent: #06d6a0;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+      --card-bg: #ffffff;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 16px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      max-width: 500px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    .select-wrapper, .input-wrapper {
+      position: relative;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      background: var(--card-bg);
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .phase-inputs {
+      background: var(--secondary);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      margin-top: 1rem;
+      border: 1px solid var(--border);
+    }
+
+    .current-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      .current-inputs {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-with-unit {
+      position: relative;
+    }
+
+    .unit {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .calculate-btn {
+      width: 100%;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+
+    .calculate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .calculate-btn:active {
+      transform: translateY(0);
+    }
+
+    .result-card {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+      border: 1px solid #c7d2fe;
+      display: none;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .result-details {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
     .home-btn {
       position: absolute;
-      top: 20px;
-      right: 20px;
-      background: #0ea5a3;
-      color: white;
-      padding: 8px 14px;
-      border-radius: 8px;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--secondary);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
       text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-      transition: background 0.2s ease;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
+
     .home-btn:hover {
-      background: #0c9693;
+      background: var(--primary);
+      color: white;
+    }
+
+    footer {
+      margin-top: 2rem;
+      text-align: right;
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+
+    /* Animation for result */
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-card.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    /* Modern toggle switch for phase selection */
+    .phase-toggle {
+      display: flex;
+      background: var(--secondary);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      border: 1px solid var(--border);
+    }
+
+    .phase-option {
+      flex: 1;
+      padding: 10px 16px;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .phase-option.active {
+      background: var(--primary);
+      color: white;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-	<a href="index.html" class="home-btn">🏠 Home</a>
-    <h1>Clamp Meter Load Calculator – Macksons Solar</h1>
-    <p style="margin:0 0 12px;color:#475569">Use clamp meter readings to estimate house load quickly. Default PF = 0.9, Voltage: 230V (1Φ) / 400V (3Φ).</p>
+  <div class="glass-card">
+    <a href="index.html" class="home-btn">
+      <span>🏠</span>
+      <span>Home</span>
+    </a>
+    
+    <div class="header">
+      <div class="logo"> <img src="clamp.png" width="45" height="45"> </div>
+      <h1>Clamp Meter Load Calculator</h1>
+	  <h2 class="subtitle">Macksons Solar</h2>
+      <p class="subtitle">Quick load estimation using clamp meter readings</p>
+    </div>
 
-    <label>System Type</label>
-    <select id="phase">
-      <option value="single">Single Phase</option>
-      <option value="three">Three Phase</option>
-    </select>
+    <div class="form-group">
+      <label>System Type</label>
+      <div class="phase-toggle">
+        <div class="phase-option active" data-value="single">Single Phase</div>
+        <div class="phase-option" data-value="three">Three Phase</div>
+      </div>
+      <select id="phase" style="display: none;">
+        <option value="single">Single Phase</option>
+        <option value="three">Three Phase</option>
+      </select>
+    </div>
 
-    <div id="singlePhaseInputs" class="row" style="margin-top:10px;">
-      <div class="col">
-        <label>Current (A)</label>
-        <input type="number" id="singleCurrent" placeholder="e.g. 10" min="0" step="0.1" />
+    <div id="singlePhaseInputs" class="phase-inputs">
+      <div class="input-with-unit">
+        <label>Current Measurement</label>
+        <input type="number" id="singleCurrent" placeholder="Enter current" min="0" step="0.1" />
+        <span class="unit">A</span>
       </div>
     </div>
 
-    <div id="threePhaseInputs" style="display:none;margin-top:10px;">
-      <div class="row">
-        <div class="col">
-          <label>Phase 1 Current (A)</label>
-          <input type="number" id="I1" placeholder="e.g. 10" min="0" step="0.1" />
+    <div id="threePhaseInputs" class="phase-inputs" style="display:none;">
+      <label>Three Phase Currents</label>
+      <div class="current-inputs">
+        <div class="input-with-unit">
+          <input type="number" id="I1" placeholder="L1" min="0" step="0.1" />
+          <span class="unit">A</span>
         </div>
-        <div class="col">
-          <label>Phase 2 Current (A)</label>
-          <input type="number" id="I2" placeholder="e.g. 8" min="0" step="0.1" />
+        <div class="input-with-unit">
+          <input type="number" id="I2" placeholder="L2" min="0" step="0.1" />
+          <span class="unit">A</span>
         </div>
-        <div class="col">
-          <label>Phase 3 Current (A)</label>
-          <input type="number" id="I3" placeholder="e.g. 6" min="0" step="0.1" />
+        <div class="input-with-unit">
+          <input type="number" id="I3" placeholder="L3" min="0" step="0.1" />
+          <span class="unit">A</span>
         </div>
       </div>
     </div>
 
-    <button id="calcBtn">Calculate Load</button>
+    <button id="calcBtn" class="calculate-btn">
+      <span>Calculate Load</span>
+      <span>→</span>
+    </button>
 
-    <div id="result" class="result" style="display:none"></div>
+    <div id="result" class="result-card">
+      <div class="result-header">
+        <span>📊</span>
+        <strong>Load Calculation</strong>
+      </div>
+      <div class="result-value" id="resultValue">0 W (0 kW)</div>
+      <div class="result-details" id="resultDetails">
+        Default settings: PF = 0.9, Voltage = 230V
+      </div>
+    </div>
 
     <footer>Created by Milan Methnuwan</footer>
   </div>
@@ -86,50 +350,80 @@
     const V_SINGLE = 230;
     const V_THREE = 400;
 
-    document.getElementById('phase').addEventListener('change', e => {
+    // Modern toggle functionality
+    const phaseOptions = document.querySelectorAll('.phase-option');
+    const phaseSelect = document.getElementById('phase');
+    
+    phaseOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        phaseOptions.forEach(opt => opt.classList.remove('active'));
+        option.classList.add('active');
+        phaseSelect.value = option.dataset.value;
+        
+        // Trigger phase change
+        const event = new Event('change');
+        phaseSelect.dispatchEvent(event);
+      });
+    });
+
+    // Phase change handler
+    phaseSelect.addEventListener('change', e => {
       const phase = e.target.value;
       document.getElementById('singlePhaseInputs').style.display = (phase === 'single') ? 'block' : 'none';
       document.getElementById('threePhaseInputs').style.display = (phase === 'three') ? 'block' : 'none';
-      document.getElementById('result').style.display = 'none';
+      document.getElementById('result').classList.remove('show');
     });
 
+    // Calculate button handler
     document.getElementById('calcBtn').addEventListener('click', () => {
-      const phase = document.getElementById('phase').value;
+      const phase = phaseSelect.value;
       const resultDiv = document.getElementById('result');
       let P = 0;
+      let voltage = 0;
 
       if (phase === 'single') {
         const I = parseFloat(document.getElementById('singleCurrent').value) || 0;
         if (I <= 0) {
-          resultDiv.style.display = 'block';
-          resultDiv.innerHTML = '<div class="warn">Please enter a valid current (A).</div>';
+          showError("Please enter a valid current measurement");
           return;
         }
         P = V_SINGLE * I * PF;
+        voltage = V_SINGLE;
       } else {
         const I1 = parseFloat(document.getElementById('I1').value) || 0;
         const I2 = parseFloat(document.getElementById('I2').value) || 0;
         const I3 = parseFloat(document.getElementById('I3').value) || 0;
         if (I1 <= 0 && I2 <= 0 && I3 <= 0) {
-          resultDiv.style.display = 'block';
-          resultDiv.innerHTML = '<div class="warn">Please enter at least one phase current.</div>';
+          showError("Please enter at least one phase current");
           return;
         }
         const avgI = (I1 + I2 + I3) / 3;
         P = Math.sqrt(3) * V_THREE * avgI * PF;
+        voltage = V_THREE;
       }
 
       const kW = P / 1000;
-      resultDiv.style.display = 'block';
-      resultDiv.innerHTML = `
-        <div class="ok">
-          <strong>Estimated Load:</strong> ${P.toFixed(0)} W (${kW.toFixed(2)} kW)
-        </div>
-        <p style="margin-top:6px;color:#475569">
-          Power Factor = ${PF}, Voltage = ${phase === 'single' ? V_SINGLE : V_THREE}V
-        </p>
-      `;
+      document.getElementById('resultValue').textContent = `${P.toFixed(0)} W (${kW.toFixed(2)} kW)`;
+      document.getElementById('resultDetails').textContent = 
+        `Power Factor = ${PF}, Voltage = ${voltage}V`;
+      
+      resultDiv.classList.add('show');
     });
+
+    function showError(message) {
+      const resultDiv = document.getElementById('result');
+      resultDiv.style.background = 'linear-gradient(135deg, #fee2e2, #fecaca)';
+      resultDiv.style.borderColor = '#fca5a5';
+      document.getElementById('resultValue').textContent = 'Calculation Error';
+      document.getElementById('resultDetails').textContent = message;
+      resultDiv.classList.add('show');
+      
+      // Reset style after 3 seconds
+      setTimeout(() => {
+        resultDiv.style.background = '';
+        resultDiv.style.borderColor = '';
+      }, 3000);
+    }
   </script>
 </body>
 </html>
