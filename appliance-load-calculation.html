@@ -5,93 +5,371 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home Appliance Load Calculator</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 24px; background: #f7fafc; color: #0f172a; }
-    .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); max-width: 900px; margin: 0 auto; position: relative; }
-    h1 { font-size: 20px; margin-bottom: 12px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-    th, td { padding: 8px; border: 1px solid #e2e8f0; text-align: center; }
-    th { background: #e2e8f0; }
-    input[type=number] { width: 60px; padding: 4px; text-align: center; border-radius: 6px; border: 1px solid #cbd5e1; }
-    tfoot td { font-weight: bold; background: #f1f5f9; }
-    button { margin-top: 16px; padding: 10px 14px; border-radius:10px; border:0; background:#0ea5a3; color:white; font-weight:600; cursor:pointer; }
-    .result { margin-top: 18px; font-size: 14px; }
-    footer { margin-top: 18px; text-align: right; font-size: 13px; color: #94a3b8; }
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #f8fafc;
+      --accent: #06d6a0;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+      --card-bg: #ffffff;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 16px;
+      --radius-sm: 8px;
+    }
 
-    /* Home button style */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      max-width: 1000px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
     .home-btn {
       position: absolute;
-      top: 20px;
-      right: 20px;
-      background: #0ea5a3;
-      color: white;
-      padding: 8px 14px;
-      border-radius: 8px;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--secondary);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
       text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-      transition: background 0.2s ease;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
+
     .home-btn:hover {
-      background: #0c9693;
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Table styling */
+    .table-container {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: rgba(99, 102, 241, 0.05);
+      font-weight: 600;
+      color: var(--text);
+      position: sticky;
+      top: 0;
+    }
+
+    tr:hover {
+      background: rgba(99, 102, 241, 0.03);
+    }
+
+    tfoot tr {
+      background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+      font-weight: 600;
+    }
+
+    tfoot td {
+      border-bottom: none;
+      font-size: 1rem;
+    }
+
+    /* Input styling */
+    input[type="number"] {
+      width: 80px;
+      padding: 8px 10px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      background: var(--card-bg);
+    }
+
+    input[type="number"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    /* Button styling */
+    .calculate-btn {
+      width: 100%;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+
+    .calculate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .calculate-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Result styling */
+    .result {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+      border: 1px solid #a7f3d0;
+      display: none;
+    }
+
+    .result.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    footer {
+      margin-top: 2rem;
+      text-align: right;
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 1.5rem;
+      }
+      
+      th, td {
+        padding: 8px 6px;
+        font-size: 0.8rem;
+      }
+      
+      input[type="number"] {
+        width: 60px;
+        padding: 6px 8px;
+      }
+      
+      .table-container {
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .glass-card {
+        padding: 1rem;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      th, td {
+        padding: 6px 4px;
+        font-size: 0.75rem;
+      }
+      
+      input[type="number"] {
+        width: 50px;
+        padding: 4px 6px;
+      }
+    }
+
+    /* Wattage column styling */
+    .wattage {
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+
+    .total-cell {
+      color: var(--primary-dark);
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <a href="index.html" class="home-btn">🏠 Home</a>
-    <h1>Home Appliance Load Calculator - Macksons Solar</h1>
-    <p>Enter the quantity of each appliance to calculate total load.</p>
-    <table id="loadTable">
-      <thead>
-        <tr>
-          <th>Appliance</th>
-          <th>Typical Wattage (W)</th>
-          <th>Quantity</th>
-          <th>Total Wattage (W)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>LED Bulb</td><td>12</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>CFL Bulb</td><td>20</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Ceiling Fan</td><td>70</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Table / Pedestal Fan</td><td>50</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>TV (32–55")</td><td>100</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Home Theatre</td><td>200</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Refrigerator</td><td>200</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Air Fryer</td><td>1500</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Freezer</td><td>250</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Washing Machine (motor only)</td><td>400</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Washing Machine (with heater)</td><td>1800</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Microwave Oven</td><td>1200</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Rice Cooker</td><td>500</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Electric Kettle</td><td>1500</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Toaster</td><td>1000</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Blender / Mixer</td><td>500</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Laptop Charger</td><td>60</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-        <tr><td>Mobile Phone Charger</td><td>20</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-		<tr><td>AC 9,000 BTU</td><td>1000</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-		<tr><td>AC 12,000 BTU</td><td>1350</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-		<tr><td>AC 18,000 BTU</td><td>2200</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-		<tr><td>AC 24,000 BTU</td><td>3000</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-		<tr><td>AC 36,000 BTU</td><td>3500</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-		<tr><td>Instant Water Heater</td><td>4000</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-		<tr><td>Clothes Iron</td><td>1500</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-		<tr><td>DVR / NVR</td><td>30</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-		<tr><td>CCTV Camera</td><td>10</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-		<tr><td>Pressure Pump (1 kW)</td><td>1000</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-		<tr><td>Water Pump 0.5–1 HP</td><td>500</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-		<tr><td>Water Pump 1.5–2 HP</td><td>1300</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-		<tr><td>Large Pump 3 HP+</td><td>3500</td><td><input type="number" min="0" value="0"></td><td class="total">0</td></tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="3">Total Load</td>
-          <td id="grandTotal">0 W</td>
-        </tr>
-      </tfoot>
-    </table>
-    <button id="calcBtn">Calculate Total Load</button>
-    <div class="result" id="result"></div>
+  <div class="glass-card">
+    <a href="index.html" class="home-btn">
+      <span>🏠</span>
+      <span>Home</span>
+    </a>
+    
+    <div class="header">
+      <div class="logo"> <img src="house.png" width="45" height="45"> </div>
+      <h1>Home Appliance Load Calculator</h1>
+	  <h2 class="subtitle">Macksons Solar</h2>
+      <p class="subtitle">Enter the quantity of each appliance to calculate total load</p>
+    </div>
+
+    <div class="table-container">
+      <table id="loadTable">
+        <thead>
+          <tr>
+            <th>Appliance</th>
+            <th>Typical Wattage</th>
+            <th>Quantity</th>
+            <th>Total Wattage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>LED Bulb</td><td class="wattage">12 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>CFL Bulb</td><td class="wattage">20 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Ceiling Fan</td><td class="wattage">70 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Table / Pedestal Fan</td><td class="wattage">50 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>TV (32–55")</td><td class="wattage">100 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Home Theatre</td><td class="wattage">200 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Refrigerator</td><td class="wattage">200 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Air Fryer</td><td class="wattage">1500 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Freezer</td><td class="wattage">250 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Washing Machine (motor only)</td><td class="wattage">400 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Washing Machine (with heater)</td><td class="wattage">1800 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Microwave Oven</td><td class="wattage">1200 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Rice Cooker</td><td class="wattage">500 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Electric Kettle</td><td class="wattage">1500 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Toaster</td><td class="wattage">1000 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Blender / Mixer</td><td class="wattage">500 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Laptop Charger</td><td class="wattage">60 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Mobile Phone Charger</td><td class="wattage">20 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>AC 9,000 BTU</td><td class="wattage">1000 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>AC 12,000 BTU</td><td class="wattage">1350 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>AC 18,000 BTU</td><td class="wattage">2200 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>AC 24,000 BTU</td><td class="wattage">3000 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>AC 36,000 BTU</td><td class="wattage">3500 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Instant Water Heater</td><td class="wattage">4000 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Clothes Iron</td><td class="wattage">1500 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>DVR / NVR</td><td class="wattage">30 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>CCTV Camera</td><td class="wattage">10 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Pressure Pump (1 kW)</td><td class="wattage">1000 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Water Pump 0.5–1 HP</td><td class="wattage">500 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Water Pump 1.5–2 HP</td><td class="wattage">1300 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+          <tr><td>Large Pump 3 HP+</td><td class="wattage">3500 W</td><td><input type="number" min="0" value="0"></td><td class="total total-cell">0 W</td></tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">Total Load</td>
+            <td id="grandTotal" class="total-cell">0 W</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <button id="calcBtn" class="calculate-btn">
+      <span>Calculate Total Load</span>
+      <span>⚡</span>
+    </button>
+
+    <div class="result" id="result">
+      <div class="result-header">
+        <span>📊</span>
+        <strong>Load Calculation Complete</strong>
+      </div>
+      <div class="result-value" id="resultValue">Total load calculated successfully</div>
+    </div>
+
     <footer>Created by Milan Methnuwan</footer>
   </div>
 
@@ -99,17 +377,37 @@
     document.getElementById('calcBtn').addEventListener('click', ()=>{
       const rows = document.querySelectorAll('#loadTable tbody tr');
       let grandTotal = 0;
+      
       rows.forEach(row=>{
         const wattage = parseFloat(row.cells[1].innerText) || 0;
         const qty = parseFloat(row.cells[2].querySelector('input').value) || 0;
         const total = wattage * qty;
-        row.cells[3].innerText = total.toFixed(0);
+        row.cells[3].innerText = `${total.toFixed(0)} W`;
         grandTotal += total;
       });
+      
       const grandKW = (grandTotal / 1000).toFixed(2);
       document.getElementById('grandTotal').innerText = `${grandTotal} W (${grandKW} kW)`;
+      
+      // Show result with animation
+      const resultDiv = document.getElementById('result');
+      const resultValue = document.getElementById('resultValue');
+      resultValue.textContent = `Total Load: ${grandTotal} W (${grandKW} kW)`;
+      resultDiv.classList.add('show');
+      
+      // Auto-hide result after 60 seconds
+      setTimeout(() => {
+        resultDiv.classList.remove('show');
+      }, 60000);
+    });
+
+    // Add real-time calculation on input change
+    const inputs = document.querySelectorAll('input[type="number"]');
+    inputs.forEach(input => {
+      input.addEventListener('input', () => {
+        document.getElementById('calcBtn').click();
+      });
     });
   </script>
 </body>
 </html>
-
