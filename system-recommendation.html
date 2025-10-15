@@ -6,192 +6,417 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Hybrid System Calculator – Macksons Solar</title>
   <style>
-    body {
-      font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
-      margin: 24px;
-      background: #f7fafc;
-      color: #0f172a;
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #f8fafc;
+      --accent: #06d6a0;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+      --card-bg: #ffffff;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 16px;
+      --radius-sm: 8px;
     }
 
-    .card {
-      background: white;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
       padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
       max-width: 900px;
-      margin: 0 auto;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       position: relative;
     }
 
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
     h1 {
-      font-size: 20px;
-      margin: 0 0 8px;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
     }
 
     label {
       display: block;
-      margin-top: 12px;
-      font-size: 13px;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9rem;
     }
 
-    input[type="number"],
-    select {
+    .select-wrapper, .input-wrapper {
+      position: relative;
+    }
+
+    select, input {
       width: 100%;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
-      font-size: 14px;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      background: var(--card-bg);
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
     }
 
     .row {
       display: flex;
-      gap: 12px;
+      gap: 1rem;
     }
 
     .col {
       flex: 1;
     }
 
-    button {
-      margin-top: 16px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 0;
-      background: #0ea5a3;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    button:hover {
-      background: #0c9693;
-    }
-
-    .result {
-      margin-top: 18px;
-      padding: 14px;
-      border-radius: 10px;
-      background: #f1f5f9;
-    }
-
-    .warn {
-      color: #92400e;
-      background: #fff7ed;
-      padding: 10px;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-
-    .ok {
-      color: #064e3b;
-      background: #ecfdf5;
-      padding: 10px;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-
-    code {
-      background: #eef2ff;
-      padding: 2px 6px;
-      border-radius: 6px;
-    }
-
-    footer {
-      margin-top: 18px;
-      text-align: right;
-      font-size: 13px;
-      color: #94a3b8;
-    }
-
-    @media(max-width:700px) {
+    @media (max-width: 700px) {
       .row {
         flex-direction: column;
       }
     }
 
-    table {
+    .calculate-btn {
       width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1rem;
     }
 
-    th,
-    td {
-      padding: 8px 6px;
-      border-bottom: 1px solid #e6eef6;
-      text-align: left;
-      font-size: 13px;
+    .calculate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
     }
 
-    th {
+    .calculate-btn:active {
+      transform: translateY(0);
+    }
+
+    .result-card {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+      border: 1px solid #c7d2fe;
+      display: none;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-value {
+      font-size: 1.5rem;
       font-weight: 700;
+      color: var(--primary-dark);
     }
 
-    /* Home button style */
+    .result-details {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
     .home-btn {
       position: absolute;
-      top: 20px;
-      right: 20px;
-      background: #0ea5a3;
-      color: white;
-      padding: 8px 14px;
-      border-radius: 8px;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--secondary);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
       text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-      transition: background 0.2s ease;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .home-btn:hover {
-      background: #0c9693;
+      background: var(--primary);
+      color: white;
+    }
+
+    footer {
+      margin-top: 2rem;
+      text-align: right;
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+
+    /* Animation for result */
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-card.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    /* Info note styling */
+    .info-note {
+      background: #e8f4fd;
+      border: 1px solid #3498db;
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+
+    code {
+      background: rgba(99, 102, 241, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--primary-dark);
+      font-weight: 500;
+    }
+
+    /* Table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    th {
+      font-weight: 600;
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    tr:hover {
+      background: rgba(99, 102, 241, 0.03);
+    }
+
+    /* Warning and success styling */
+    .warn {
+      color: #92400e;
+      background: #fff7ed;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      margin-top: 10px;
+      border-left: 4px solid #f59e0b;
+    }
+
+    .ok {
+      color: #064e3b;
+      background: #ecfdf5;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      margin-top: 10px;
+      border-left: 4px solid #10b981;
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background: var(--border);
+      margin: 1.5rem 0;
+    }
+
+    ul {
+      padding-left: 1.5rem;
+      margin: 0.5rem 0;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+
+    /* Modern toggle switch for mode selection */
+    .mode-toggle {
+      display: flex;
+      background: var(--secondary);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      border: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+
+    .mode-option {
+      flex: 1;
+      padding: 10px 16px;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .mode-option.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Input with unit */
+    .input-with-unit {
+      position: relative;
+    }
+
+    .unit {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      font-size: 0.9rem;
     }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <a href="index.html" class="home-btn">🏠 Home</a>
-    <h1>Hybrid System Calculator – Macksons Solar</h1>
-    <p style="margin:0 0 12px;color:#475569">
-      Quickly recommend inverter & battery based on customer's house load.
-      Change "Desired backup hours" if customer wants different autonomy.
-    </p>
+  <div class="glass-card">
+    <a href="index.html" class="home-btn">
+      <span>🏠</span>
+      <span>Home</span>
+    </a>
+    
+    <div class="header">
+      <div class="logo"> <img src="hybrid.png" width="45" height="45"> </div>
+      <h1>Hybrid System Calculator</h1>
+	  <h2 class="subtitle">Macksons Solar </h2>
+      <p class="subtitle">Quickly recommend inverter & battery based on customer's house load. Change "Desired backup hours" if customer wants different autonomy.</p>
+    </div>
 
     <div class="row">
       <div class="col">
-        <label>Phase</label>
-        <select id="phase">
-          <option value="single">Single Phase (Low Voltage)</option>
-          <option value="three">Three Phase (High Voltage)</option>
-        </select>
+        <div class="form-group">
+          <label>System Phase</label>
+          <select id="phase">
+            <option value="single">Single Phase (Low Voltage)</option>
+            <option value="three">Three Phase (High Voltage)</option>
+          </select>
+        </div>
       </div>
       <div class="col">
-        <label>System Mode</label>
-        <select id="mode">
-          <option value="hybrid">Hybrid</option>
-          <option value="ongrid">On-grid</option>
-          <option value="offgrid">Off-grid</option>
-        </select>
+        <div class="form-group">
+          <label>System Mode</label>
+          <div class="mode-toggle">
+            <div class="mode-option active" data-value="hybrid">Hybrid</div>
+            <div class="mode-option" data-value="ongrid">On-grid</div>
+            <div class="mode-option" data-value="offgrid">Off-grid</div>
+          </div>
+          <select id="mode" style="display: none;">
+            <option value="hybrid">Hybrid</option>
+            <option value="ongrid">On-grid</option>
+            <option value="offgrid">Off-grid</option>
+          </select>
+        </div>
       </div>
     </div>
 
-    <label>House load (kW)</label>
-    <input id="load" type="number" min="0" step="0.01" value="3" />
-
-    <label>Desired backup hours (hrs)</label>
-    <input id="backupHours" type="number" min="0.5" step="0.5" value="4" />
-
-    <label>PV charge constraint note</label>
-    <div style="font-size:13px;color:#475569">
-      Battery is assumed charged only from PV through inverter. Maximum allowed
-      charging time target: <code>5 hrs</code> (if calculated charge time
-      &gt;5, a warning will be shown).
+    <div class="form-group">
+      <label>House Load</label>
+      <div class="input-with-unit">
+        <input id="load" type="number" min="0" step="0.01" value="3" />
+        <span class="unit">kW</span>
+      </div>
     </div>
 
-    <button id="calcBtn">Calculate</button>
+    <div class="form-group">
+      <label>Desired Backup Hours</label>
+      <div class="input-with-unit">
+        <input id="backupHours" type="number" min="0.5" step="0.5" value="4" />
+        <span class="unit">hrs</span>
+      </div>
+    </div>
 
-    <div id="out" class="result" aria-live="polite" style="display:none"></div>
+    <div class="info-note">
+      <strong>PV Charge Constraint Note:</strong> Battery is assumed charged only from PV through inverter. Maximum allowed charging time target: <code>5 hrs</code> (if calculated charge time &gt;5, a warning will be shown).
+    </div>
+
+    <button id="calcBtn" class="calculate-btn">
+      <span>Calculate System</span>
+      <span>→</span>
+    </button>
+
+    <div id="out" class="result-card" aria-live="polite"></div>
 
     <footer>Created by Milan Methnuwan</footer>
   </div>
@@ -252,14 +477,26 @@
       return isNaN(n) ? f : n;
     };
 
+    // Modern toggle functionality for mode selection
+    const modeOptions = document.querySelectorAll('.mode-option');
+    const modeSelect = document.getElementById('mode');
+    
+    modeOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        modeOptions.forEach(opt => opt.classList.remove('active'));
+        option.classList.add('active');
+        modeSelect.value = option.dataset.value;
+      });
+    });
+
     // Main calculator
     document.getElementById('calcBtn').addEventListener('click', () => {
       const phase = document.getElementById('phase').value;
-      const mode = document.getElementById('mode').value;
+      const mode = modeSelect.value;
       const loadKW = safeNum(document.getElementById('load').value, 0);
       const backupHours = safeNum(document.getElementById('backupHours').value, 4);
       const out = document.getElementById('out');
-      out.style.display = 'block';
+      out.classList.add('show');
       out.innerHTML = '';
 
       if (loadKW <= 0) {
@@ -327,9 +564,10 @@
 
       // Build output
       let html = '';
-      html += `<div><strong>Inputs</strong><div style="margin-top:6px;color:#334155">Phase: <code>${phase}</code> • Mode: <code>${mode}</code> • Load: <code>${loadKW.toFixed(2)} kW</code> • Backup: <code>${backupHours} hrs</code></div></div>`;
+      html += `<div class="result-header"><span>📊</span><strong>System Analysis</strong></div>`;
+      html += `<div class="result-details">Phase: <code>${phase}</code> • Mode: <code>${mode}</code> • Load: <code>${loadKW.toFixed(2)} kW</code> • Backup: <code>${backupHours} hrs</code></div>`;
       html += '<hr/>';
-      html += '<div><strong>Inverter recommendation</strong>';
+      html += '<div><strong>Inverter Recommendation</strong>';
       if (invRecommended) {
         html += `<div style="margin-top:8px">Recommended model: <code>${invRecommended.id}</code> — ${invRecommended.kW} kW • Max charge/discharge: ${invRecommended.maxChargeA} A</div>`;
       } else {
@@ -345,9 +583,9 @@
       }
       html += '</div><hr/>';
 
-      html += '<div><strong>Battery recommendations (per module options)</strong>';
-      html += '<div style="font-size:13px;color:#475569;margin-top:6px">Calculations use battery DOD 90% and inverter efficiency 97%.</div>';
-      html += '<table><thead><tr><th>Battery</th><th>Module kWh</th><th>Modules needed</th><th>Total kWh</th><th>Usable kWh (DOD)</th><th>Discharge hrs @ load or grid</th><th>Charge hrs (from PV)</th></tr></thead><tbody>';
+      html += '<div><strong>Battery Recommendations</strong>';
+      html += '<div style="font-size:0.9rem;color:#475569;margin-top:6px">Calculations use battery DOD 90% and inverter efficiency 97%.</div>';
+      html += '<table><thead><tr><th>Battery</th><th>Module kWh</th><th>Modules</th><th>Total kWh</th><th>Usable kWh</th><th>Discharge Time</th><th>Charge Time</th></tr></thead><tbody>';
 
       timesByInv.forEach(opt => {
         if (opt.incompatible) {
@@ -356,7 +594,7 @@
         }
         const ch = isFinite(opt.chargeTimeHours) ? opt.chargeTimeHours.toFixed(2) + ' hrs' : '—';
         const dh = isFinite(opt.dischargeTimeHours) ? opt.dischargeTimeHours.toFixed(2) + ' hrs' : '—';
-        html += `<tr><td><code>${opt.id}</code></td><td>${opt.module_kWh.toFixed(2)} kWh</td><td>${opt.modulesNeeded}</td><td>${opt.totalModules_kWh.toFixed(2)} kWh</td><td>${opt.usableTotal_kWh.toFixed(2)} kWh</td><td>${dh}</td><td>${ch}</td></tr>`;
+        html += `<tr><td><code>${opt.id}</code></td><td>${opt.module_kWh.toFixed(2)}</td><td>${opt.modulesNeeded}</td><td>${opt.totalModules_kWh.toFixed(2)}</td><td>${opt.usableTotal_kWh.toFixed(2)}</td><td>${dh}</td><td>${ch}</td></tr>`;
       });
 
       html += '</tbody></table>';
@@ -377,13 +615,10 @@
         }
       }
 
-      html += '<hr/><div><strong>Additional notes</strong><ul style="margin-top:8px"><li>Single-phase hybrid & on-grid max inverter capacity = <code>5 kW</code>. 8 kW single-phase model is off-grid only.</li><li>Single-phase inverters can be used in a three-phase system only in off-grid mode, if the house does not have any three-phase appliances.</li><li>Battery usable energy = module kWh × DOD (90%).</li><li>Charge power ≈ inverter max charge A × battery V × efficiency.</li><li>If load &gt; inverter capacity, split circuits into sub-panels.</li></ul></div>';
+      html += '<hr/><div><strong>Additional Notes</strong><ul style="margin-top:8px"><li>Single-phase hybrid & on-grid max inverter capacity = <code>5 kW</code>. 8 kW single-phase model is off-grid only.</li><li>Single-phase inverters can be used in a three-phase system only in off-grid mode, if the house does not have any three-phase appliances.</li><li>Battery usable energy = module kWh × DOD (90%).</li><li>Charge power ≈ inverter max charge A × battery V × efficiency.</li><li>If load &gt; inverter capacity, split circuits into sub-panels.</li></ul></div>';
 
       out.innerHTML = html;
     });
   </script>
 </body>
-
 </html>
-
-
