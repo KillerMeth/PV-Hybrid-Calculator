@@ -5,69 +5,250 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Macksons Solar - Hybrid System Calculator</title>
   <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #f8fafc;
+      --accent: #06d6a0;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+      --card-bg: #ffffff;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 16px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(135deg, #f0f4f8, #e2e8f0);
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      margin: 0;
-      color: #1e293b;
     }
-    .container {
-      background: #ffffff;
-      padding: 40px 60px;
-      border-radius: 20px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2.5rem;
+      max-width: 500px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+    }
+
+    .header {
       text-align: center;
-      max-width: 400px;
-      width: 100%;
+      margin-bottom: 2rem;
     }
-    h2 {
-      margin-bottom: 10px;
-      font-size: 24px;
-      font-weight: bold;
-    }
-    p {
-      margin: 0 0 30px;
-      font-size: 14px;
-      color: #64748b;
-    }
-    .btn {
-      display: block;
-      margin: 15px auto;
-      padding: 14px 0;
-      width: 100%;
-      border: none;
-      border-radius: 12px;
-      background: #0ea5e9;
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
       color: white;
-      font-size: 16px;
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--text-light);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .creator {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    .btn-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      padding: 16px 20px;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       text-decoration: none;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      position: relative;
+      overflow: hidden;
     }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
     .btn:hover {
-      background: #0284c7;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn:active {
+      transform: translateY(-1px);
+    }
+
+    .btn-icon {
+      font-size: 1.25rem;
+      transition: transform 0.3s ease;
+    }
+
+    .btn:hover .btn-icon {
+      transform: scale(1.2);
+    }
+
+    .btn-text {
+      flex: 1;
+      text-align: left;
+    }
+
+    .btn-arrow {
+      font-size: 1.1rem;
+      opacity: 0.8;
+      transition: transform 0.3s ease;
+    }
+
+    .btn:hover .btn-arrow {
+      transform: translateX(4px);
+    }
+
+    /* Specific button colors */
+    .btn-advanced {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-advanced:hover {
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+    }
+
+    .btn-load {
+      background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-load:hover {
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-clamp {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-clamp:hover {
+      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-system {
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+    }
+
+    .btn-system:hover {
+      box-shadow: 0 8px 20px rgba(6, 182, 212, 0.4);
+    }
+
+    @media (max-width: 480px) {
+      .glass-card {
+        padding: 2rem 1.5rem;
+      }
+      
+      h1 {
+        font-size: 1.75rem;
+      }
+      
+      .btn {
+        padding: 14px 16px;
+        font-size: 0.95rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Hybrid System Calculator</h2>
-    <p>Macksons Solar <br> Created by Milan Methnuwan</p>
+  <div class="glass-card">
+    <div class="header">
+      <div class="logo"><img src="pv.png" width="45" height="45"> </div>
+      <h1>Hybrid System Calculator</h1>
+      <h2 class="subtitle">Macksons Solar</h2>
+      <p class="creator">Created by Milan Methnuwan</p>
+    </div>
 
-	<a href="advanced-appliance-load-calculation.html" class="btn">🔥 Home Appliance - Advanced Load Calculation</a>
-    <a href="appliance-load-calculation.html" class="btn">⚡ Home Appliance - Load Calculation</a>
-	<a href="clamp-load-calculation.html" class="btn">⚡ Clamp Meter - Load Calculation</a>
-    <a href="system-recommendation.html" class="btn">🔋 System Recommendation</a>
-	
+    <div class="btn-grid">
+      <a href="advanced-appliance-load-calculation.html" class="btn btn-advanced">
+        <span class="btn-icon">🔥</span>
+        <span class="btn-text">Home Appliance - Advanced Load Calculation</span>
+        <span class="btn-arrow">→</span>
+      </a>
+      
+      <a href="appliance-load-calculation.html" class="btn btn-load">
+        <span class="btn-icon">⚡</span>
+        <span class="btn-text">Home Appliance - Load Calculation</span>
+        <span class="btn-arrow">→</span>
+      </a>
+      
+      <a href="clamp-load-calculation.html" class="btn btn-clamp">
+        <span class="btn-icon">🔧</span>
+        <span class="btn-text">Clamp Meter - Load Calculation</span>
+        <span class="btn-arrow">→</span>
+      </a>
+      
+      <a href="system-recommendation.html" class="btn btn-system">
+        <span class="btn-icon">🔋</span>
+        <span class="btn-text">System Recommendation</span>
+        <span class="btn-arrow">→</span>
+      </a>
+    </div>
   </div>
 </body>
 </html>
-
