@@ -1155,24 +1155,30 @@
 
         // Function to remove an appliance from the list
         function removeAppliance(button) {
-            const row = button.closest('tr');
-            const index = Array.from(applianceList.children).indexOf(row) - 1;
-            
-            if (index >= 0) {
-                const removedAppliance = appliances[index];
-                totalWatts -= removedAppliance.totalWatts;
-                totalWattHours -= removedAppliance.totalWattHours;
-                totalQuantity -= removedAppliance.quantity;
-                appliances.splice(index, 1);
-            }
-            
-            row.remove();
-            updateTotals();
-            
-            if (applianceList.children.length === 0) {
-                applianceList.appendChild(emptyRow);
-            }
-        }
+			const row = button.closest('tr');
+
+		// Get correct index without -1 bug
+			const rows = Array.from(applianceList.querySelectorAll('tr')).filter(r => r !== emptyRow);
+			const index = rows.indexOf(row);
+
+			if (index >= 0) {
+			const removedAppliance = appliances[index];
+
+			totalWatts -= removedAppliance.totalWatts;
+			totalWattHours -= removedAppliance.totalWattHours;
+			totalQuantity -= removedAppliance.quantity;
+
+			appliances.splice(index, 1);
+    }
+
+			row.remove();
+			updateTotals();
+
+    // Show empty row if no items left
+    if (applianceList.querySelectorAll('tr').length === 0) {
+        applianceList.appendChild(emptyRow);
+    }
+}
 
         // Function to add a new appliance to the list and calculate
         function addAppliance() {
