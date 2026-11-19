@@ -1,624 +1,1387 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Hybrid System Calculator – Macksons Solar</title>
-  <style>
-    :root {
-      --primary: #6366f1;
-      --primary-dark: #4f46e5;
-      --secondary: #f8fafc;
-      --accent: #06d6a0;
-      --text: #1e293b;
-      --text-light: #64748b;
-      --border: #e2e8f0;
-      --card-bg: #ffffff;
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --radius: 16px;
-      --radius-sm: 8px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid Solar System Sizing Calculator | Macksons Solar</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #f8fafc;
+            --accent: #06d6a0;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --card-bg: #ffffff;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 16px;
+            --radius-sm: 8px;
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-      line-height: 1.6;
-      color: var(--text);
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    .glass-card {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 2rem;
-      max-width: 900px;
-      width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      position: relative;
-    }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            margin: 0 auto;
+        }
 
-    .header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
+        /* Desktop layout: 2 columns */
+        @media (min-width: 768px) {
+            .glass-card {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 25px;
+                padding: 25px;
+            }
 
-    .logo {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      border-radius: 50%;
-      margin: 0 auto 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      color: white;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-    }
+            .main-content {
+                display: block;
+                order: 0;
+            }
 
-    h1 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-    }
+            .side-note {
+                order: 0;
+            }
+        }
 
-    .subtitle {
-      color: var(--text-light);
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
+        .main-content {
+            width: 100%;
+        }
 
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
+        .side-note {
+            width: 100%;
+        }
 
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: var(--text);
-      font-size: 0.9rem;
-    }
+        /* Mobile layout: side-note positioned between header and inputs */
+        @media (max-width: 767px) {
+            .glass-card {
+                display: flex;
+                flex-direction: column;
+            }
 
-    .select-wrapper, .input-wrapper {
-      position: relative;
-    }
+            .main-content {
+                display: contents;
+            }
 
-    select, input {
-      width: 100%;
-      padding: 12px 16px;
-      border: 2px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 1rem;
-      background: var(--card-bg);
-      transition: all 0.3s ease;
-      font-family: inherit;
-    }
+            .header {
+                order: 1;
+            }
 
-    select:focus, input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-    }
+            .side-note {
+                order: 2;
+                margin: 15px 0;
+            }
 
-    .row {
-      display: flex;
-      gap: 1rem;
-    }
+            .form-section,
+            .button-group,
+            .results-section {
+                order: 3;
+            }
+        }
 
-    .col {
-      flex: 1;
-    }
+        .header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
 
-    @media (max-width: 700px) {
-      .row {
-        flex-direction: column;
-      }
-    }
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            overflow: hidden;
+        }
 
-    .calculate-btn {
-      width: 100%;
-      padding: 14px 20px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 1rem;
-    }
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.35rem;
+        }
 
-    .calculate-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-    }
+        .subtitle {
+            color: var(--primary-dark);
+            text-align: center;
+            margin: 0 0 12px 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
 
-    .calculate-btn:active {
-      transform: translateY(0);
-    }
+        h2 {
+            color: var(--text);
+            text-align: center;
+            margin: 0 0 15px 0;
+            font-size: 1.4rem;
+        }
 
-    .result-card {
-      margin-top: 1.5rem;
-      padding: 1.5rem;
-      border-radius: var(--radius-sm);
-      background: linear-gradient(135deg, #dbeafe, #e0e7ff);
-      border: 1px solid #c7d2fe;
-      display: none;
-    }
+        .description {
+            text-align: center;
+            margin-bottom: 10px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
 
-    .result-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 0.5rem;
-    }
+        .home-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--secondary);
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 10;
+        }
 
-    .result-value {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-    }
+        .home-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
 
-    .result-details {
-      color: var(--text-light);
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
-    }
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
 
-    .home-btn {
-      position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
-      background: var(--secondary);
-      color: var(--text);
-      padding: 8px 12px;
-      border-radius: var(--radius-sm);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.85rem;
-      transition: all 0.3s ease;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+        @media (max-width: 560px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
-    .home-btn:hover {
-      background: var(--primary);
-      color: white;
-    }
+        .field-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
 
-    footer {
-      margin-top: 2rem;
-      text-align: right;
-      color: var(--text-light);
-      font-size: 0.85rem;
-    }
+        .field-box label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    /* Animation for result */
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .field-hint {
+            font-size: 0.78rem;
+            font-weight: 400;
+            color: var(--text-light);
+        }
 
-    .result-card.show {
-      display: block;
-      animation: slideIn 0.3s ease;
-    }
+        .field-box input,
+        .field-box select {
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            background: var(--card-bg);
+            transition: all 0.3s ease;
+            font-family: inherit;
+            width: 100%;
+        }
 
-    /* Info note styling */
-    .info-note {
-      background: #e8f4fd;
-      border: 1px solid #3498db;
-      border-radius: var(--radius-sm);
-      padding: 1rem;
-      margin: 1rem 0;
-      font-size: 0.9rem;
-    }
+        .field-box input:focus,
+        .field-box select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
 
-    code {
-      background: rgba(99, 102, 241, 0.1);
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: var(--primary-dark);
-      font-weight: 500;
-    }
+        .sync-bar {
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin-bottom: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
 
-    /* Table styling */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-      font-size: 0.85rem;
-    }
+        .mini-btn {
+            background: white;
+            color: var(--primary-dark);
+            border: 1px solid var(--primary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
 
-    th, td {
-      padding: 10px 8px;
-      border-bottom: 1px solid var(--border);
-      text-align: left;
-    }
+        .mini-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
 
-    th {
-      font-weight: 600;
-      background: rgba(99, 102, 241, 0.05);
-    }
+        /* Advanced Parameters Accordion */
+        details.advanced-box {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            margin-bottom: 20px;
+        }
 
-    tr:hover {
-      background: rgba(99, 102, 241, 0.03);
-    }
+        details.advanced-box summary {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--primary-dark);
+            user-select: none;
+        }
 
-    /* Warning and success styling */
-    .warn {
-      color: #92400e;
-      background: #fff7ed;
-      padding: 12px;
-      border-radius: var(--radius-sm);
-      margin-top: 10px;
-      border-left: 4px solid #f59e0b;
-    }
+        details.advanced-box .form-grid {
+            margin-top: 14px;
+            margin-bottom: 0;
+        }
 
-    .ok {
-      color: #064e3b;
-      background: #ecfdf5;
-      padding: 12px;
-      border-radius: var(--radius-sm);
-      margin-top: 10px;
-      border-left: 4px solid #10b981;
-    }
+        .smart-btn {
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
 
-    hr {
-      border: none;
-      height: 1px;
-      background: var(--border);
-      margin: 1.5rem 0;
-    }
+        .smart-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
 
-    ul {
-      padding-left: 1.5rem;
-      margin: 0.5rem 0;
-    }
+        .smart-btn:hover::before {
+            left: 100%;
+        }
 
-    li {
-      margin-bottom: 0.5rem;
-      line-height: 1.5;
-    }
+        .smart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
 
-    /* Modern toggle switch for mode selection */
-    .mode-toggle {
-      display: flex;
-      background: var(--secondary);
-      border-radius: var(--radius-sm);
-      padding: 4px;
-      border: 1px solid var(--border);
-      margin-bottom: 1rem;
-    }
+        .smart-btn:active {
+            transform: translateY(-1px);
+        }
 
-    .mode-option {
-      flex: 1;
-      padding: 10px 16px;
-      text-align: center;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: all 0.3s ease;
-      font-weight: 500;
-    }
+        #calcBtn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: 2px solid var(--primary);
+        }
 
-    .mode-option.active {
-      background: var(--primary);
-      color: white;
-    }
+        #calcBtn:hover {
+            background: linear-gradient(135deg, var(--primary-dark), #4338ca);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+        }
 
-    /* Input with unit */
-    .input-with-unit {
-      position: relative;
-    }
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 15px 0 20px 0;
+        }
 
-    .unit {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-light);
-      font-size: 0.9rem;
-    }
-  </style>
+        @media (max-width: 480px) {
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        #reportBtn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: 2px solid #10b981;
+        }
+
+        #reportBtn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        #resetBtn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: 2px solid #ef4444;
+        }
+
+        #resetBtn:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Recommendation Cards */
+        .results-section {
+            margin-top: 10px;
+        }
+
+        .rec-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        @media (max-width: 640px) {
+            .rec-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .rec-card {
+            background: linear-gradient(135deg, #f8fafc, #eef2ff);
+            border: 1px solid #c7d2fe;
+            border-radius: var(--radius-sm);
+            padding: 18px 15px;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .rec-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .rec-card.pv-card {
+            background: linear-gradient(135deg, #fefce8, #fef3c7);
+            border-color: #fde68a;
+        }
+
+        .rec-card.inv-card {
+            background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+            border-color: #c7d2fe;
+        }
+
+        .rec-card.bat-card {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            border-color: #a7f3d0;
+        }
+
+        .rec-icon {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+
+        .rec-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .rec-main {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .rec-sub {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
+
+        .total-section {
+            background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            border: 1px solid #c7d2fe;
+        }
+
+        .total-section p {
+            font-size: 0.98rem;
+            margin: 7px 0;
+        }
+
+        .kwh {
+            color: #059669;
+            font-weight: bold;
+        }
+
+        .kw {
+            color: var(--primary-dark);
+            font-weight: bold;
+        }
+
+        .solar-disclaimer {
+            font-size: 0.8rem !important;
+            color: var(--text-light);
+            margin-top: 12px !important;
+            padding-top: 10px;
+            border-top: 1px dashed #a5b4fc;
+        }
+
+        /* Side Note Styling */
+        .wattage-note {
+            background: #e8f4fd;
+            border: 1px solid var(--primary);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+        }
+
+        .wattage-note h3 {
+            color: var(--text);
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .wattage-note h3::before {
+            content: "⚡";
+        }
+
+        .wattage-list {
+            max-height: 440px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 767px) {
+            .wattage-list {
+                max-height: 230px;
+            }
+        }
+
+        .wattage-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 10px;
+            border-bottom: 1px dashed #bdc3c7;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 5px;
+        }
+
+        .wattage-item:hover {
+            background: #d6eaf8;
+            transform: translateX(4px);
+        }
+
+        .wattage-item.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .wattage-item.selected .appliance-name,
+        .wattage-item.selected .wattage-value {
+            color: white;
+        }
+
+        .appliance-name {
+            color: var(--text);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .appliance-meta {
+            display: block;
+            font-size: 0.76rem;
+            font-weight: 400;
+            opacity: 0.85;
+        }
+
+        .wattage-value {
+            color: #e67e22;
+            font-weight: bold;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            margin-left: 8px;
+        }
+
+        .note-text {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .tip-box {
+            padding: 10px;
+            background: #fff3cd;
+            border-radius: 5px;
+            font-size: 0.8em;
+            color: #856404;
+        }
+
+        /* Report Modal */
+        .report-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .report-content {
+            background: white;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: var(--radius);
+            max-width: 800px;
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 15px;
+        }
+
+        .report-section {
+            margin-bottom: 20px;
+            padding: 18px;
+            background: #f8f9fa;
+            border-radius: var(--radius-sm);
+        }
+
+        .report-section h3 {
+            color: var(--text);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .report-section h3::before {
+            content: "📊";
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .close-btn:hover {
+            background: #dc2626;
+        }
+
+        .print-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .print-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .report-table-wrap {
+            overflow-x: auto;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        .report-table th,
+        .report-table td {
+            padding: 11px 12px;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+
+        .report-table th {
+            background: var(--primary);
+            color: white;
+        }
+
+        .report-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 12px 15px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #f59e0b;
+        }
+
+        .highlight p {
+            margin: 6px 0;
+        }
+
+        footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 767px) {
+            .glass-card {
+                padding: 1.5rem;
+            }
+
+            .home-btn {
+                top: 1rem;
+                right: 1rem;
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+
+            .report-content {
+                margin: 10px auto;
+                padding: 20px;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .glass-card,
+            footer {
+                display: none;
+            }
+
+            .report-modal {
+                display: block !important;
+                position: static;
+                background: white;
+                padding: 0;
+            }
+
+            .report-content {
+                box-shadow: none;
+                margin: 0;
+                max-width: 100%;
+            }
+
+            .close-btn,
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <div class="glass-card">
-    <a href="index.html" class="home-btn">
-      <span>🏠</span>
-      <span>Home</span>
-    </a>
-    
-    <div class="header">
-      <div class="logo"> <img src="hybrid.png" width="45" height="45"> </div>
-      <h1>Hybrid System Calculator</h1>
-	  <h2 class="subtitle">Macksons Solar </h2>
-      <p class="subtitle">Quickly recommend inverter & battery based on customer's house load. Change "Desired backup hours" if customer wants different autonomy.</p>
-    </div>
+    <div class="glass-card">
+        <a href="index.html" class="home-btn">
+            <span>🏠</span>
+            <span>Home</span>
+        </a>
 
-    <div class="row">
-      <div class="col">
-        <div class="form-group">
-          <label>System Phase</label>
-          <select id="phase">
-            <option value="single">Single Phase (Low Voltage)</option>
-            <option value="three">Three Phase (High Voltage)</option>
-          </select>
+        <div class="main-content">
+            <div class="header">
+                <div class="logo">
+                    <img src="hybrid.png" width="45" height="45">
+                </div>
+                <h1>Hybrid Solar System Suggester</h1>
+                <h2 class="subtitle">Macksons Solar</h2>
+                <p class="description">Enter your consumption and peak load to get recommended PV array, hybrid inverter, and battery bank sizes.</p>
+            </div>
+
+            <div class="form-section">
+                <div class="form-grid">
+                    <div class="field-box">
+                        <label for="monthlyKwh">
+                            <span>Monthly Consumption (kWh)</span>
+                            <span class="field-hint">Units / month</span>
+                        </label>
+                        <input type="number" id="monthlyKwh" placeholder="e.g., 450" min="1" step="0.1" required>
+                    </div>
+
+                    <div class="field-box">
+                        <label for="peakKw">
+                            <span>House Peak Power (kW)</span>
+                            <span class="field-hint">Max simultaneous load</span>
+                        </label>
+                        <input type="number" id="peakKw" placeholder="e.g., 3.5" min="0.1" step="0.1" required>
+                    </div>
+
+                    <div class="field-box">
+                        <label for="dayKwh">
+                            <span>Daytime Use (kWh/day)</span>
+                            <span class="field-hint">6:00 AM – 6:00 PM</span>
+                        </label>
+                        <input type="number" id="dayKwh" placeholder="e.g., 6.0" min="0" step="0.1" required>
+                    </div>
+
+                    <div class="field-box">
+                        <label for="nightKwh">
+                            <span>Nighttime Use (kWh/day)</span>
+                            <span class="field-hint">6:00 PM – 6:00 AM</span>
+                        </label>
+                        <input type="number" id="nightKwh" placeholder="e.g., 9.0" min="0" step="0.1" required>
+                    </div>
+
+                    <div class="field-box" style="grid-column: 1 / -1;">
+                        <label for="connectionType">
+                            <span>Utility Connection Type</span>
+                            <span class="field-hint">Determines max inverter &amp; phase</span>
+                        </label>
+                        <select id="connectionType">
+                            <option value="1P" selected>Single-Phase (1P) — 1 to 8 kW Inverter</option>
+                            <option value="3P30A">Three-Phase 30A (3P 30A) — 1P Inverters or 3P up to 20 kW</option>
+                            <option value="3P60A">Three-Phase 60A (3P 60A) — 1P Inverters or 3P up to 40 kW</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="sync-bar">
+                    <span id="dailyCheckText">Daily split total: <strong>0.00 kWh/day</strong> (0 kWh/month)</span>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" class="mini-btn" id="autoSplitBtn" title="Split monthly kWh into 40% Day / 60% Night">Auto-Split 40/60</button>
+                        <button type="button" class="mini-btn" id="importApplianceBtn" title="Import totals from Appliance Load Calculator">📥 Import from Load Calc</button>
+                    </div>
+                </div>
+
+                <details class="advanced-box">
+                    <summary>⚙️ System Sizing Preferences (Sun Hours, Backup Days, Battery DoD)</summary>
+                    <div class="form-grid">
+                        <div class="field-box">
+                            <label for="psh">Peak Sun Hours (hrs/day)</label>
+                            <input type="number" id="psh" value="4.2" min="2" max="8" step="0.1">
+                        </div>
+                        <div class="field-box">
+                            <label for="panelWatt">Solar Panel Wattage (W)</label>
+                            <select id="panelWatt">
+                                <option value="550">550W Monocrystalline</option>
+                                <option value="580" selected>580W N-Type Bifacial</option>
+                                <option value="600">600W N-Type</option>
+                                <option value="620">620W N-Type High-Output</option>
+                                <option value="645">645W N-Type High-Output</option>
+                            </select>
+                        </div>
+                        <div class="field-box">
+                            <label for="backupDays">Night / Backup Autonomy</label>
+                            <select id="backupDays">
+                                <option value="1" selected>1 Night (Standard Daily Cycle)</option>
+                                <option value="1.5">1.5 Nights (Extra Reserve)</option>
+                                <option value="2">2 Nights (Extended Outage Backup)</option>
+                            </select>
+                        </div>
+                        <div class="field-box">
+                            <label for="batteryType">Battery Chemistry (Usable DoD)</label>
+                            <select id="batteryType">
+                                <option value="0.90" selected>LiFePO4 Lithium (90% DoD)</option>
+                                <option value="0.80">Lithium-Ion (80% DoD)</option>
+                                <option value="0.50">Tubular / Gel Lead-Acid (50% DoD)</option>
+                            </select>
+                        </div>
+                    </div>
+                </details>
+
+                <button id="calcBtn" class="smart-btn" type="button">
+                    <span class="btn-icon">⚡</span>
+                    <span>Suggest Hybrid System</span>
+                </button>
+            </div>
+
+            <div class="button-group">
+                <button id="reportBtn" class="smart-btn" type="button">
+                    <span class="btn-icon">📊</span>
+                    <span>Generate Proposal Report</span>
+                </button>
+                <button id="resetBtn" class="smart-btn" type="button">
+                    <span class="btn-icon">🗑️</span>
+                    <span>Reset Inputs</span>
+                </button>
+            </div>
+
+            <div class="results-section" id="resultsSection">
+                <h2>Recommended Hybrid System</h2>
+
+                <div class="rec-grid">
+                    <div class="rec-card pv-card">
+                        <div class="rec-icon">☀️</div>
+                        <div class="rec-title">PV Solar Array</div>
+                        <div class="rec-main" id="resPvKw">-- kWp</div>
+                        <div class="rec-sub" id="resPvDetail">Enter usage to calculate panel count</div>
+                    </div>
+
+                    <div class="rec-card inv-card">
+                        <div class="rec-icon">🔌</div>
+                        <div class="rec-title">Hybrid Inverter</div>
+                        <div class="rec-main" id="resInvKw">-- kW</div>
+                        <div class="rec-sub" id="resInvDetail">Sized for peak power + surge margin</div>
+                    </div>
+
+                    <div class="rec-card bat-card">
+                        <div class="rec-icon">🔋</div>
+                        <div class="rec-title">Battery Bank</div>
+                        <div class="rec-main" id="resBatKwh">-- kWh</div>
+                        <div class="rec-sub" id="resBatDetail">Sized for nighttime load &amp; backup</div>
+                    </div>
+                </div>
+
+                <div class="total-section">
+                    <h2>System Engineering Summary</h2>
+                    <p>Estimated Daily Solar Generation: <span id="sumGenDay" class="kwh">0.00</span> kWh/day (<span id="sumGenMonth" class="kwh">0.00</span> kWh/month)</p>
+                    <p>Inverter Load Utilization at Peak: <span id="sumInvLoad" class="kw">0%</span> (Continuous rating)</p>
+                    <p>Usable Battery Energy Stored: <span id="sumUsableBat" class="kwh">0.00</span> kWh (<span id="sumBatModules" class="kw">0 × 5.12 kWh</span> packs)</p>
+                    <p class="solar-disclaimer">* Sizing accounts for ~80% PV system performance ratio, 25% inverter headroom above peak load, and battery Depth of Discharge (DoD). Final design should verify roof area and starting surge of heavy inductive motors. <strong>All results must be double-checked with an engineer.</strong></p>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="form-group">
-          <label>System Mode</label>
-          <div class="mode-toggle">
-            <div class="mode-option active" data-value="hybrid">Hybrid</div>
-            <div class="mode-option" data-value="ongrid">On-grid</div>
-            <div class="mode-option" data-value="offgrid">Off-grid</div>
-          </div>
-          <select id="mode" style="display: none;">
-            <option value="hybrid">Hybrid</option>
-            <option value="ongrid">On-grid</option>
-            <option value="offgrid">Off-grid</option>
-          </select>
+
+        <!-- Single Quick Household Profiles Reference -->
+        <div class="side-note">
+            <div class="wattage-note">
+                <h3>Quick Household Profiles</h3>
+                <p class="note-text">Click any typical home profile to auto-fill values</p>
+
+                <div class="wattage-list">
+                    <div class="wattage-item" data-monthly="180" data-day="2.5" data-night="3.5" data-peak="1.8">
+                        <div>
+                            <span class="appliance-name">Small Home (1–2 Bed)</span>
+                            <span class="appliance-meta">Day: 2.5 kWh | Night: 3.5 kWh | Peak: 1.8 kW</span>
+                        </div>
+                        <span class="wattage-value">180 kWh</span>
+                    </div>
+
+                    <div class="wattage-item" data-monthly="300" data-day="4.0" data-night="6.0" data-peak="2.8">
+                        <div>
+                            <span class="appliance-name">Medium Home (No AC)</span>
+                            <span class="appliance-meta">Day: 4.0 kWh | Night: 6.0 kWh | Peak: 2.8 kW</span>
+                        </div>
+                        <span class="wattage-value">300 kWh</span>
+                    </div>
+
+                    <div class="wattage-item" data-monthly="450" data-day="6.0" data-night="9.0" data-peak="3.8">
+                        <div>
+                            <span class="appliance-name">Family Home (1 AC)</span>
+                            <span class="appliance-meta">Day: 6.0 kWh | Night: 9.0 kWh | Peak: 3.8 kW</span>
+                        </div>
+                        <span class="wattage-value">450 kWh</span>
+                    </div>
+
+                    <div class="wattage-item" data-monthly="650" data-day="9.0" data-night="12.7" data-peak="5.2">
+                        <div>
+                            <span class="appliance-name">Large Home (2 ACs)</span>
+                            <span class="appliance-meta">Day: 9.0 kWh | Night: 12.7 kWh | Peak: 5.2 kW</span>
+                        </div>
+                        <span class="wattage-value">650 kWh</span>
+                    </div>
+
+                    <div class="wattage-item" data-monthly="900" data-day="13.0" data-night="17.0" data-peak="7.5">
+                        <div>
+                            <span class="appliance-name">Luxury Villa (3 ACs)</span>
+                            <span class="appliance-meta">Day: 13.0 kWh | Night: 17.0 kWh | Peak: 7.5 kW</span>
+                        </div>
+                        <span class="wattage-value">900 kWh</span>
+                    </div>
+
+                    <div class="wattage-item" data-monthly="1200" data-day="24.0" data-night="16.0" data-peak="10.5">
+                        <div>
+                            <span class="appliance-name">Home Office / Shop</span>
+                            <span class="appliance-meta">Day: 24.0 kWh | Night: 16.0 kWh | Peak: 10.5 kW</span>
+                        </div>
+                        <span class="wattage-value">1200 kWh</span>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <strong>Tip:</strong> Already used the <em>Appliance Load Calculator</em>? Click <strong>📥 Import from Load Calc</strong> to pull your saved appliances directly!
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
-    <div class="form-group">
-      <label>House Load</label>
-      <div class="input-with-unit">
-        <input id="load" type="number" min="0" step="0.01" value="3" />
-        <span class="unit">kW</span>
-      </div>
+    <!-- Proposal Report Modal -->
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <button class="close-btn" id="closeReport" type="button">×</button>
+
+            <div class="report-header">
+                <h2>☀️ Hybrid Solar System Proposal</h2>
+                <p><strong>Macksons Solar</strong> &bull; Generated on: <span id="reportDate"></span></p>
+            </div>
+
+            <div class="report-section">
+                <h3>Customer Load Profile</h3>
+                <div class="highlight">
+                    <p><strong>Monthly Energy Consumption:</strong> <span id="repMonthly">0</span> kWh/month</p>
+                    <p><strong>Daytime Consumption (6 AM – 6 PM):</strong> <span id="repDay">0</span> kWh/day</p>
+                    <p><strong>Nighttime Consumption (6 PM – 6 AM):</strong> <span id="repNight">0</span> kWh/day</p>
+                    <p><strong>House Peak Power Demand:</strong> <span id="repPeak">0</span> kW</p>
+                    <p><strong>Utility Connection Type:</strong> <span id="repConn">1P</span></p>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h3>Recommended Equipment Specification</h3>
+                <div class="report-table-wrap">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Recommended Size</th>
+                                <th>Configuration / Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="repEquipTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h3>Technical Notes &amp; Insights</h3>
+                <div id="repInsights"></div>
+            </div>
+
+            <button class="print-btn" type="button" onclick="window.print()">🖨️ Print System Proposal</button>
+        </div>
     </div>
-
-    <div class="form-group">
-      <label>Desired Backup Hours</label>
-      <div class="input-with-unit">
-        <input id="backupHours" type="number" min="0.5" step="0.5" value="4" />
-        <span class="unit">hrs</span>
-      </div>
-    </div>
-
-    <div class="info-note">
-      <strong>PV Charge Constraint Note:</strong> Battery is assumed charged only from PV through inverter. Maximum allowed charging time target: <code>5 hrs</code> (if calculated charge time &gt;5, a warning will be shown).
-    </div>
-
-    <button id="calcBtn" class="calculate-btn">
-      <span>Calculate System</span>
-      <span>→</span>
-    </button>
-
-    <div id="out" class="result-card" aria-live="polite"></div>
 
     <footer>Created by Milan Methnuwan</footer>
-  </div>
 
-  <script>
-    // Constants
-    const INVERTER_EFF = 0.97;
-    const DOD = 0.9;
+    <script>
+        const APPLIANCE_STORAGE_KEY = 'macksons_solar_appliances_v1';
+        const STANDARD_INVERTERS_KW = [1, 1.5, 2, 3, 3.6, 5, 6, 8, 10, 12, 15, 20, 25, 30, 40, 50];
 
-    // Data sets
-    const singlePhase = {
-      batteries: [
-        { id: 'STE-MS5', voltage: 51.2, capacityAh: 100, kWh: (51.2 * 100) / 1000 },
-        { id: 'STE-MS10', voltage: 51.2, capacityAh: 200, kWh: (51.2 * 200) / 1000 }
-      ],
-      inverters: [
-        { id: 'STH-5KTL-LS-P', kW: 5, maxChargeA: 100, modes: ['ongrid', 'hybrid', 'offgrid'] },
-        { id: 'STH-5KTL-LS', kW: 5, maxChargeA: 120, modes: ['ongrid', 'hybrid', 'offgrid'] }
-      ],
-      maxHybridOnGridCapacity_kW: 5
-    };
+        // Inputs
+        const monthlyKwhInput = document.getElementById('monthlyKwh');
+        const peakKwInput = document.getElementById('peakKw');
+        const dayKwhInput = document.getElementById('dayKwh');
+        const nightKwhInput = document.getElementById('nightKwh');
+        const connectionTypeSelect = document.getElementById('connectionType');
+        const pshInput = document.getElementById('psh');
+        const panelWattSelect = document.getElementById('panelWatt');
+        const backupDaysSelect = document.getElementById('backupDays');
+        const batteryTypeSelect = document.getElementById('batteryType');
 
-    const threePhase = {
-      batteries: [
-        { id: 'STE-ES5', nominalV: 102.4, capacityAh: 50, kWh: (102.4 * 50) / 1000 },
-        { id: 'STE-ES10', nominalV: 204.8, capacityAh: 50, kWh: (204.8 * 50) / 1000 },
-        { id: 'STE-ES15', nominalV: 307.2, capacityAh: 50, kWh: (307.2 * 50) / 1000 },
-        { id: 'STE-ES20', nominalV: 409.6, capacityAh: 50, kWh: (409.6 * 50) / 1000 },
-        { id: 'STE-ES25', nominalV: 512.0, capacityAh: 50, kWh: (512.0 * 50) / 1000 },
-        { id: 'STE-ES30', nominalV: 614.4, capacityAh: 50, kWh: (614.4 * 50) / 1000 },
-        { id: 'STE-MS5', voltage: 51.2, capacityAh: 100, kWh: (51.2 * 100) / 1000 },
-        { id: 'STE-MS10', voltage: 51.2, capacityAh: 200, kWh: (51.2 * 200) / 1000 }
-      ],
-      inverters: [
-        {
-          id: 'STH-10KTL-HTP', kW: 10, maxChargeA: 25,
-          modes: ['ongrid', 'hybrid', 'offgrid'],
-          allowedBatteries: ['STE-ES5', 'STE-ES10', 'STE-ES15', 'STE-ES20', 'STE-ES25', 'STE-ES30']
-        },
-        {
-          id: 'STH-15KTL-HT', kW: 15, maxChargeA: 25,
-          modes: ['ongrid', 'hybrid', 'offgrid'],
-          allowedBatteries: ['STE-ES5', 'STE-ES10', 'STE-ES15', 'STE-ES20', 'STE-ES25', 'STE-ES30']
+        // Buttons & UI
+        const calcBtn = document.getElementById('calcBtn');
+        const reportBtn = document.getElementById('reportBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const autoSplitBtn = document.getElementById('autoSplitBtn');
+        const importApplianceBtn = document.getElementById('importApplianceBtn');
+        const closeReportBtn = document.getElementById('closeReport');
+        const reportModal = document.getElementById('reportModal');
+        const dailyCheckText = document.getElementById('dailyCheckText');
+
+        let lastCalculation = null;
+
+        function updateDailySplitPreview() {
+            const d = parseFloat(dayKwhInput.value) || 0;
+            const n = parseFloat(nightKwhInput.value) || 0;
+            const dailyTotal = d + n;
+            const impliedMonthly = dailyTotal * 30;
+            dailyCheckText.innerHTML = `Daily split total: <strong>${dailyTotal.toFixed(2)} kWh/day</strong> (${impliedMonthly.toFixed(0)} kWh/month)`;
         }
-      ]
-    };
 
-    // Common inverter shared for both
-    const commonInverters = [
-      { id: 'STH-8KTL-LS', kW: 8, maxChargeA: 160, modes: ['offgrid'], allowedBatteries: ['STE-MS5', 'STE-MS10'] },
-	  { id: 'STH-5KTL-LS-P', kW: 5, maxChargeA: 100, modes: ['offgrid'], allowedBatteries: ['STE-MS5', 'STE-MS10'] },
-	  { id: 'STH-5KTL-LS', kW: 8, maxChargeA: 120, modes: ['offgrid'], allowedBatteries: ['STE-MS5', 'STE-MS10'] }
-    ];
-
-    // Utility
-    const safeNum = (v, f = 0) => {
-      const n = parseFloat(v);
-      return isNaN(n) ? f : n;
-    };
-
-    // Modern toggle functionality for mode selection
-    const modeOptions = document.querySelectorAll('.mode-option');
-    const modeSelect = document.getElementById('mode');
-    
-    modeOptions.forEach(option => {
-      option.addEventListener('click', () => {
-        modeOptions.forEach(opt => opt.classList.remove('active'));
-        option.classList.add('active');
-        modeSelect.value = option.dataset.value;
-      });
-    });
-
-    // Main calculator
-    document.getElementById('calcBtn').addEventListener('click', () => {
-      const phase = document.getElementById('phase').value;
-      const mode = modeSelect.value;
-      const loadKW = safeNum(document.getElementById('load').value, 0);
-      const backupHours = safeNum(document.getElementById('backupHours').value, 4);
-      const out = document.getElementById('out');
-      out.classList.add('show');
-      out.innerHTML = '';
-
-      if (loadKW <= 0) {
-        out.innerHTML = '<div class="warn">Please enter a valid house load (kW).</div>';
-        return;
-      }
-      if (backupHours <= 0) {
-        out.innerHTML = '<div class="warn">Please enter valid backup hours (>0).</div>';
-        return;
-      }
-
-      // Select data without mutating source
-      const baseData = (phase === 'single') ? singlePhase : threePhase;
-      const data = {
-        ...baseData,
-        inverters: [...(baseData.inverters || []), ...commonInverters]
-      };
-
-      // Inverter recommendation
-      const possibleInv = data.inverters.filter(inv => inv.modes.includes(mode));
-      let invCandidates = possibleInv.filter(inv => {
-        if (phase === 'single' && (mode === 'hybrid' || mode === 'ongrid')) {
-          return inv.kW <= data.maxHybridOnGridCapacity_kW && inv.kW >= loadKW;
-        }
-        return inv.kW >= loadKW;
-      });
-      if (invCandidates.length === 0) {
-        invCandidates = possibleInv.filter(inv => inv.kW >= loadKW);
-      }
-      invCandidates.sort((a, b) => a.kW - b.kW);
-      const invRecommended = invCandidates.length ? invCandidates[0] : null;
-
-      const maxAvailableKW = possibleInv.reduce((m, i) => Math.max(m, i.kW), 0);
-      const needsSplit = loadKW > maxAvailableKW;
-
-      // Battery calculations
-      const requiredEnergy_kWh = loadKW * backupHours / INVERTER_EFF;
-      const batteryOptions = data.batteries.map(b => {
-        const V = b.voltage || b.nominalV;
-        const module_kWh = b.kWh;
-        const usable_kWh_per_module = module_kWh * DOD;
-        const modulesNeeded = Math.ceil(requiredEnergy_kWh / usable_kWh_per_module);
-        const totalModules_kWh = modulesNeeded * module_kWh;
-        const usableTotal_kWh = totalModules_kWh * DOD;
-        return { id: b.id, moduleVoltage: V, module_kWh, usable_kWh_per_module, modulesNeeded, totalModules_kWh, usableTotal_kWh };
-      });
-
-      function computeTimesForInverter(inv) {
-        return batteryOptions.map(opt => {
-          if (inv.allowedBatteries && !inv.allowedBatteries.includes(opt.id)) {
-            return { ...opt, incompatible: true };
-          }
-          const V = opt.moduleVoltage;
-          const maxChargePower_kW = (inv.maxChargeA * V) / 1000 * INVERTER_EFF;
-          const chargeTimeHours = opt.totalModules_kWh / (maxChargePower_kW > 0 ? maxChargePower_kW : Infinity);
-          const dischargeTimeHours = (opt.usableTotal_kWh * INVERTER_EFF) / (maxChargePower_kW > 0 ? maxChargePower_kW : Infinity);
-          return { ...opt, maxChargePower_kW, chargeTimeHours, dischargeTimeHours };
+        // Auto-sync monthly <-> day/night helpers
+        monthlyKwhInput.addEventListener('input', () => {
+            const m = parseFloat(monthlyKwhInput.value);
+            if (!isNaN(m) && m > 0 && !dayKwhInput.value && !nightKwhInput.value) {
+                const daily = m / 30;
+                dayKwhInput.value = (daily * 0.4).toFixed(1);
+                nightKwhInput.value = (daily * 0.6).toFixed(1);
+                updateDailySplitPreview();
+            }
         });
-      }
 
-      let timesByInv = null;
-      if (invRecommended) timesByInv = computeTimesForInverter(invRecommended);
-      else if (possibleInv.length) timesByInv = computeTimesForInverter(possibleInv[0]);
-      else timesByInv = computeTimesForInverter(data.inverters[0]);
+        [dayKwhInput, nightKwhInput].forEach(el => {
+            el.addEventListener('input', () => {
+                updateDailySplitPreview();
+                const d = parseFloat(dayKwhInput.value);
+                const n = parseFloat(nightKwhInput.value);
+                if (!isNaN(d) && !isNaN(n) && (d + n) > 0 && !monthlyKwhInput.value) {
+                    monthlyKwhInput.value = ((d + n) * 30).toFixed(0);
+                }
+            });
+        });
 
-      // Build output
-      let html = '';
-      html += `<div class="result-header"><span>📊</span><strong>System Analysis</strong></div>`;
-      html += `<div class="result-details">Phase: <code>${phase}</code> • Mode: <code>${mode}</code> • Load: <code>${loadKW.toFixed(2)} kW</code> • Backup: <code>${backupHours} hrs</code></div>`;
-      html += '<hr/>';
-      html += '<div><strong>Inverter Recommendation</strong>';
-      if (invRecommended) {
-        html += `<div style="margin-top:8px">Recommended model: <code>${invRecommended.id}</code> — ${invRecommended.kW} kW • Max charge/discharge: ${invRecommended.maxChargeA} A</div>`;
-      } else {
-        html += `<div class="warn">No inverter exactly matches constraints for selected phase/mode and load. Closest options:</div>`;
-        if (invCandidates.length) {
-          html += '<ul>' + invCandidates.map(i => `<li><code>${i.id}</code> — ${i.kW} kW • MaxCharge ${i.maxChargeA} A</li>`).join('') + '</ul>';
-        } else {
-          html += '<div class="warn">No inverter available for selected configuration.</div>';
+        autoSplitBtn.addEventListener('click', () => {
+            const m = parseFloat(monthlyKwhInput.value);
+            if (isNaN(m) || m <= 0) {
+                alert('Enter Monthly Consumption (kWh) first to auto-split into Day & Night.');
+                monthlyKwhInput.focus();
+                return;
+            }
+            const daily = m / 30;
+            dayKwhInput.value = (daily * 0.4).toFixed(2);
+            nightKwhInput.value = (daily * 0.6).toFixed(2);
+            updateDailySplitPreview();
+        });
+
+        importApplianceBtn.addEventListener('click', () => {
+            try {
+                const raw = localStorage.getItem(APPLIANCE_STORAGE_KEY);
+                if (!raw) {
+                    alert('No saved data found from the Appliance Load Calculator. Add appliances there first.');
+                    return;
+                }
+                const list = JSON.parse(raw);
+                if (!Array.isArray(list) || list.length === 0) {
+                    alert('Your Appliance Load Calculator list is currently empty.');
+                    return;
+                }
+
+                let totalWatts = 0;
+                let totalDailyKwh = 0;
+
+                list.forEach(item => {
+                    const w = Number(item.watts) || 0;
+                    const q = Number(item.quantity) || 1;
+                    const h = Number(item.hours) || 0;
+                    totalWatts += w * q;
+                    totalDailyKwh += (w * q * h) / 1000;
+                });
+
+                const monthly = totalDailyKwh * 30;
+                monthlyKwhInput.value = monthly.toFixed(1);
+                peakKwInput.value = (totalWatts / 1000).toFixed(2);
+                dayKwhInput.value = (totalDailyKwh * 0.4).toFixed(2);
+                nightKwhInput.value = (totalDailyKwh * 0.6).toFixed(2);
+                updateDailySplitPreview();
+                calculateHybridSystem();
+            } catch (e) {
+                alert('Could not read saved appliance data.');
+            }
+        });
+
+        function selectStandardInverter(requiredKw) {
+            for (const size of STANDARD_INVERTERS_KW) {
+                if (size >= requiredKw) return size;
+            }
+            return Math.ceil(requiredKw / 10) * 10;
         }
-      }
-      if (needsSplit) {
-        html += `<div class="warn" style="margin-top:8px">Load (${loadKW.toFixed(2)} kW) is higher than the maximum available inverter capacity (${maxAvailableKW} kW). <strong>Recommend splitting house wiring / separate sub-panel.</strong></div>`;
-      }
-      html += '</div><hr/>';
 
-      html += '<div><strong>Battery Recommendations</strong>';
-      html += '<div style="font-size:0.9rem;color:#475569;margin-top:6px">Calculations use battery DOD 90% and inverter efficiency 97%.</div>';
-      html += '<table><thead><tr><th>Battery</th><th>Module kWh</th><th>Modules</th><th>Total kWh</th><th>Usable kWh</th><th>Discharge Time</th><th>Charge Time</th></tr></thead><tbody>';
+        function calculateHybridSystem() {
+            const monthlyKwh = parseFloat(monthlyKwhInput.value);
+            const peakKw = parseFloat(peakKwInput.value);
+            const dayKwh = parseFloat(dayKwhInput.value);
+            const nightKwh = parseFloat(nightKwhInput.value);
 
-      timesByInv.forEach(opt => {
-        if (opt.incompatible) {
-          html += `<tr><td><code>${opt.id}</code></td><td colspan="6" style="color:#b91c1c">Not compatible with recommended inverter</td></tr>`;
-          return;
+            const connectionType = connectionTypeSelect.value;
+            const psh = parseFloat(pshInput.value) || 4.2;
+            const panelWatt = parseInt(panelWattSelect.value, 10) || 580;
+            const backupDays = parseFloat(backupDaysSelect.value) || 1;
+            const dod = parseFloat(batteryTypeSelect.value) || 0.90;
+
+            if (isNaN(monthlyKwh) || monthlyKwh <= 0) {
+                alert('Please enter a valid Monthly Consumption (kWh).');
+                monthlyKwhInput.focus();
+                return;
+            }
+            if (isNaN(peakKw) || peakKw <= 0) {
+                alert('Please enter a valid House Peak Power (kW).');
+                peakKwInput.focus();
+                return;
+            }
+            if (isNaN(dayKwh) || dayKwh < 0 || isNaN(nightKwh) || nightKwh < 0 || (dayKwh + nightKwh) <= 0) {
+                alert('Please enter valid Daytime and Nighttime consumption (kWh/day).');
+                dayKwhInput.focus();
+                return;
+            }
+
+            // 1. PV Array Sizing
+            const systemEfficiency = 0.80;
+            const batteryChargeLoss = nightKwh * 0.08;
+            const targetDailyKwh = Math.max(monthlyKwh / 30, dayKwh + nightKwh) + batteryChargeLoss;
+
+            const rawPvKw = targetDailyKwh / (psh * systemEfficiency);
+            const panelCount = Math.max(2, Math.ceil((rawPvKw * 1000) / panelWatt));
+            const actualPvKw = (panelCount * panelWatt) / 1000;
+            const estDailyGen = actualPvKw * psh * systemEfficiency;
+            const estMonthlyGen = estDailyGen * 30;
+
+            // 2. Hybrid Inverter Sizing with Connection Type Constraints
+            const maxInvByConnection = connectionType === '1P' ? 8 : (connectionType === '3P30A' ? 20 : 40);
+            const connectionLabel = connectionType === '1P' ? '1P (Single-Phase)' : (connectionType === '3P30A' ? '3P 30A (Three-Phase)' : '3P 60A (Three-Phase)');
+
+            const requiredInvByPeak = peakKw * 1.25;
+            const requiredInvByPv = actualPvKw / 1.35;
+            const rawRecommendedInv = selectStandardInverter(Math.max(requiredInvByPeak, requiredInvByPv));
+
+            const exceedsLimit = rawRecommendedInv > maxInvByConnection;
+            const recommendedInvKw = exceedsLimit ? maxInvByConnection : rawRecommendedInv;
+            const invPeakLoadPct = Math.round((peakKw / recommendedInvKw) * 100);
+
+            let phaseNote = '';
+            if (connectionType === '1P') {
+                phaseNote = exceedsLimit
+                    ? `⚠️ Capped at 8 kW max for 1P (Needed ${rawRecommendedInv} kW — upgrade to 3P)`
+                    : `1P Hybrid (1–8 kW allowed)`;
+            } else if (connectionType === '3P30A') {
+                if (exceedsLimit) {
+                    phaseNote = `⚠️ Capped at 20 kW max for 3P 30A (Needed ${rawRecommendedInv} kW — upgrade to 3P 60A)`;
+                } else if (recommendedInvKw <= 8) {
+                    phaseNote = `1P or 3P Hybrid (Up to 20 kW max on 3P 30A)`;
+                } else {
+                    phaseNote = `3P Hybrid (Max 20 kW on 3P 30A)`;
+                }
+            } else {
+                if (exceedsLimit) {
+                    phaseNote = `⚠️ Capped at 40 kW max for 3P 60A (Needed ${rawRecommendedInv} kW)`;
+                } else if (recommendedInvKw <= 8) {
+                    phaseNote = `1P or 3P Hybrid (Up to 40 kW max on 3P 60A)`;
+                } else {
+                    phaseNote = `3P Hybrid (Max 40 kW on 3P 60A)`;
+                }
+            }
+
+            // 3. Battery Bank Sizing
+            const requiredUsableKwh = nightKwh * backupDays;
+            const rawBatteryKwh = requiredUsableKwh / dod;
+            const moduleSize = 5.12;
+            const moduleCount = Math.max(1, Math.ceil(rawBatteryKwh / moduleSize));
+            const recommendedBatKwh = moduleCount * moduleSize;
+            const usableBatKwh = recommendedBatKwh * dod;
+
+            // Update UI Cards
+            document.getElementById('resPvKw').textContent = `${actualPvKw.toFixed(2)} kWp`;
+            document.getElementById('resPvDetail').textContent = `${panelCount} × ${panelWatt}W Solar Panels`;
+
+            document.getElementById('resInvKw').textContent = `${recommendedInvKw} kW`;
+            document.getElementById('resInvDetail').textContent = `${phaseNote}`;
+
+            document.getElementById('resBatKwh').textContent = `${recommendedBatKwh.toFixed(2)} kWh`;
+            document.getElementById('resBatDetail').textContent = `${moduleCount} × 5.12 kWh (${Math.round(dod * 100)}% DoD)`;
+
+            // Update Summary
+            document.getElementById('sumGenDay').textContent = estDailyGen.toFixed(2);
+            document.getElementById('sumGenMonth').textContent = estMonthlyGen.toFixed(0);
+            document.getElementById('sumInvLoad').textContent = `${invPeakLoadPct}%`;
+            document.getElementById('sumUsableBat').textContent = usableBatKwh.toFixed(2);
+            document.getElementById('sumBatModules').textContent = `${moduleCount} × 5.12 kWh`;
+
+            lastCalculation = {
+                monthlyKwh,
+                peakKw,
+                dayKwh,
+                nightKwh,
+                connectionType,
+                connectionLabel,
+                maxInvByConnection,
+                exceedsLimit,
+                rawRecommendedInv,
+                psh,
+                panelWatt,
+                backupDays,
+                dod,
+                panelCount,
+                actualPvKw,
+                estDailyGen,
+                estMonthlyGen,
+                recommendedInvKw,
+                phaseNote,
+                invPeakLoadPct,
+                moduleCount,
+                recommendedBatKwh,
+                usableBatKwh
+            };
+
+            if (window.innerWidth <= 767) {
+                document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
-        const ch = isFinite(opt.chargeTimeHours) ? opt.chargeTimeHours.toFixed(2) + ' hrs' : '—';
-        const dh = isFinite(opt.dischargeTimeHours) ? opt.dischargeTimeHours.toFixed(2) + ' hrs' : '—';
-        html += `<tr><td><code>${opt.id}</code></td><td>${opt.module_kWh.toFixed(2)}</td><td>${opt.modulesNeeded}</td><td>${opt.totalModules_kWh.toFixed(2)}</td><td>${opt.usableTotal_kWh.toFixed(2)}</td><td>${dh}</td><td>${ch}</td></tr>`;
-      });
 
-      html += '</tbody></table>';
+        function generateProposalReport() {
+            if (!lastCalculation) {
+                calculateHybridSystem();
+                if (!lastCalculation) return;
+            }
 
-      if (invRecommended) {
-        const numericChargeTimes = timesByInv
-          .map(o => o.chargeTimeHours)
-          .filter(t => Number.isFinite(t));
-        if (numericChargeTimes.length === 0) {
-          html += `<div class="warn">Recommended inverter (<code>${invRecommended.id}</code>) isn't compatible with these battery options.</div>`;
-        } else {
-          const worstCharge = Math.max(...numericChargeTimes);
-          if (worstCharge > 5) {
-            html += `<div class="warn">Calculated charge time (some options) &gt; 5 hrs (${worstCharge.toFixed(2)} hrs). Consider higher PV size or higher current inverter.</div>`;
-          } else {
-            html += `<div class="ok">Calculated charge times are within 5 hrs for recommended inverter (<code>${invRecommended.id}</code>).</div>`;
-          }
+            const c = lastCalculation;
+            document.getElementById('reportDate').textContent = new Date().toLocaleDateString();
+            document.getElementById('repMonthly').textContent = c.monthlyKwh.toFixed(1);
+            document.getElementById('repDay').textContent = c.dayKwh.toFixed(2);
+            document.getElementById('repNight').textContent = c.nightKwh.toFixed(2);
+            document.getElementById('repPeak').textContent = c.peakKw.toFixed(2);
+            document.getElementById('repConn').textContent = c.connectionLabel;
+
+            const tbody = document.getElementById('repEquipTable');
+            tbody.innerHTML = `
+                <tr>
+                    <td><strong>Solar PV Array</strong></td>
+                    <td>${c.actualPvKw.toFixed(2)} kWp</td>
+                    <td>${c.panelCount} pcs × ${c.panelWatt}W Mono/Bifacial Panels (~${c.estMonthlyGen.toFixed(0)} kWh/month)</td>
+                </tr>
+                <tr>
+                    <td><strong>Hybrid Inverter</strong></td>
+                    <td>${c.recommendedInvKw} kW</td>
+                    <td>${c.phaseNote} • Handles ${c.peakKw} kW peak load (${c.invPeakLoadPct}% utilization)</td>
+                </tr>
+                <tr>
+                    <td><strong>Battery Storage</strong></td>
+                    <td>${c.recommendedBatKwh.toFixed(2)} kWh</td>
+                    <td>${c.moduleCount} × 5.12 kWh (51.2V 100Ah) • ${c.usableBatKwh.toFixed(2)} kWh usable at ${Math.round(c.dod * 100)}% DoD</td>
+                </tr>
+            `;
+
+            const insightsDiv = document.getElementById('repInsights');
+            const insights = [
+                `<strong>Energy Offset:</strong> At ${c.psh} peak sun hours/day, the ${c.actualPvKw.toFixed(2)} kWp array generates roughly <strong>${c.estMonthlyGen.toFixed(0)} kWh/month</strong> against your <strong>${c.monthlyKwh.toFixed(0)} kWh/month</strong> usage.`,
+                `<strong>Nighttime Coverage:</strong> Your ${c.recommendedBatKwh.toFixed(2)} kWh battery bank delivers <strong>${c.usableBatKwh.toFixed(2)} kWh</strong> of usable energy to cover your <strong>${c.nightKwh.toFixed(2)} kWh</strong> nightly demand (${c.backupDays} night${c.backupDays > 1 ? 's' : ''} autonomy).`,
+                `<strong>Peak Surge Margin:</strong> The ${c.recommendedInvKw} kW hybrid inverter leaves <strong>${(c.recommendedInvKw - c.peakKw).toFixed(2)} kW</strong> of continuous headroom above your ${c.peakKw.toFixed(2)} kW peak load.`
+            ];
+
+            if (c.nightKwh > c.dayKwh * 1.5) {
+                insights.push('🌙 <strong>High Night Load Note:</strong> Over 60% of your power is used at night. Shifting heavy loads (washing machine, water pump, ironing) to daytime solar hours can reduce battery wear.');
+            }
+
+            if (c.exceedsLimit) {
+                insights.push(`⚠️ <strong>Connection Limit Alert:</strong> Your load/PV requires a <strong>${c.rawRecommendedInv} kW</strong> inverter, which exceeds the <strong>${c.maxInvByConnection} kW</strong> maximum limit for <strong>${c.connectionLabel}</strong>. Consider upgrading your utility supply connection.`);
+            }
+
+            insights.push('👷 <strong>Engineering Verification:</strong> All calculated system sizes and equipment recommendations must be double-checked with an engineer before final.');
+
+            insightsDiv.innerHTML = insights.map(text => `<p style="margin: 8px 0;">${text}</p>`).join('');
+            reportModal.style.display = 'block';
         }
-      }
 
-      html += '<hr/><div><strong>Additional Notes</strong><ul style="margin-top:8px"><li>Single-phase hybrid & on-grid max inverter capacity = <code>5 kW</code>. 8 kW single-phase model is off-grid only.</li><li>Single-phase inverters can be used in a three-phase system only in off-grid mode, if the house does not have any three-phase appliances.</li><li>Battery usable energy = module kWh × DOD (90%).</li><li>Charge power ≈ inverter max charge A × battery V × efficiency.</li><li>If load &gt; inverter capacity, split circuits into sub-panels.</li></ul></div>';
+        function resetForm() {
+            monthlyKwhInput.value = '';
+            peakKwInput.value = '';
+            dayKwhInput.value = '';
+            nightKwhInput.value = '';
+            connectionTypeSelect.value = '1P';
+            lastCalculation = null;
 
-      out.innerHTML = html;
-    });
-  </script>
+            document.getElementById('resPvKw').textContent = '-- kWp';
+            document.getElementById('resPvDetail').textContent = 'Enter usage to calculate panel count';
+            document.getElementById('resInvKw').textContent = '-- kW';
+            document.getElementById('resInvDetail').textContent = 'Sized for peak power + surge margin';
+            document.getElementById('resBatKwh').textContent = '-- kWh';
+            document.getElementById('resBatDetail').textContent = 'Sized for nighttime load & backup';
+
+            document.getElementById('sumGenDay').textContent = '0.00';
+            document.getElementById('sumGenMonth').textContent = '0.00';
+            document.getElementById('sumInvLoad').textContent = '0%';
+            document.getElementById('sumUsableBat').textContent = '0.00';
+            document.getElementById('sumBatModules').textContent = '0 × 5.12 kWh';
+            updateDailySplitPreview();
+
+            document.querySelectorAll('.wattage-item').forEach(i => i.classList.remove('selected'));
+            monthlyKwhInput.focus();
+        }
+
+        // Quick profile click events
+        document.querySelectorAll('.wattage-item').forEach(item => {
+            item.addEventListener('click', function () {
+                document.querySelectorAll('.wattage-item').forEach(i => i.classList.remove('selected'));
+                this.classList.add('selected');
+
+                monthlyKwhInput.value = this.getAttribute('data-monthly');
+                dayKwhInput.value = this.getAttribute('data-day');
+                nightKwhInput.value = this.getAttribute('data-night');
+                peakKwInput.value = this.getAttribute('data-peak');
+
+                updateDailySplitPreview();
+                calculateHybridSystem();
+            });
+        });
+
+        connectionTypeSelect.addEventListener('change', () => {
+            if (lastCalculation) calculateHybridSystem();
+        });
+
+        calcBtn.addEventListener('click', calculateHybridSystem);
+        reportBtn.addEventListener('click', generateProposalReport);
+        resetBtn.addEventListener('click', resetForm);
+        closeReportBtn.addEventListener('click', () => {
+            reportModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === reportModal) {
+                reportModal.style.display = 'none';
+            }
+        });
+
+        [monthlyKwhInput, peakKwInput, dayKwhInput, nightKwhInput].forEach(input => {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') calculateHybridSystem();
+            });
+        });
+
+        monthlyKwhInput.focus();
+    </script>
 </body>
 </html>
